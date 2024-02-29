@@ -1,10 +1,11 @@
+#!/usr/bin/env python3
 import dataclasses
 import io
 import itertools
 import json
 import logging
+import math
 import os
-import pathlib
 import pprint
 import re
 import uuid
@@ -14,295 +15,49 @@ from collections.abc import Iterable
 from contextlib import contextmanager
 from dataclasses import dataclass
 from decimal import Decimal
+from pathlib import Path, PurePath, PureWindowsPath
+from typing import Any, Set  # noqa: F401
 from typing import (
     Callable,
     ClassVar,
     Dict,
+    IO,
     Iterator,
     List,
-    Mapping,
     Optional,
-    Set,
     Tuple,
     Type,
     TypeVar,
     TypedDict,
     Union,
+    cast,
 )
 
 
 logger = logging.getLogger(__name__)
 
+# === GAME DATA TYPES ==================================================
 
-'''
-def iter_pak_files(
-    root: str,
-    ignore_error: bool = False,
-) -> Iterator[Tuple[pathlib.Path, zipfile.ZipFile]]:
-    for root, _, files, dir_fd in os.fwalk(root):
-        path = pathlib.Path(root)
-        for name in files:
-            if name.lower().endswith(".pak"):
-                fd = os.open(name, os.O_RDONLY, dir_fd=dir_fd)
-                try:
-                    with open(fd, "rb", closefd=False) as fp:
-                        try:
-                            with zipfile.ZipFile(fp, "r") as pak:
-                                yield (path / name, pak)
-                        except zipfile.BadZipFile:
-                            if not ignore_error:
-                                raise
-                finally:
-                    os.close(fd)
-
-
-class Strings(object):
-    logger = globals()["logger"].getChild("Strings")  # type: logging.Logger
-
-    string_escape = r'\\[n"\\]'  # FIXME
-    string_regex = f'[\\w.,]+|"(?:[^"\\\\]|{string_escape})*"'
-    line_regex = re.compile(f"^\\s*({string_regex})\\s+({string_regex})\\s*$")
-
-    def __init__(self, root: str):
-        self.strings = (
-            {}
-        )  # type: Dict[str, Dict[Tuple[pathlib.Path, pathlib.PureWindowsPath], str]]
-        self.language = (
-            None,
-            pathlib.PureWindowsPath("[strings]") / "strings_english.str",
-        )  # type: Tuple[Optional[pathlib.Path], pathlib.PureWindowsPath]
-        self.load(root)
-
-    @classmethod
-    def unescape_string(cls, x: str) -> str:
-        def repl(m: re.Match) -> str:
-            escapes = {
-                "\\n": "\n",
-            }
-            try:
-                return escapes[m[0]]
-            except KeyError:
-                assert m[0].startswith("\\")
-                assert len(m[0]) == 2
-                return m[0][1]
-
-        if x.startswith('"'):
-            assert x.endswith('"')
-            return re.sub(cls.string_escape, repl, x[1:-1])
-        else:
-            return x
-
-    def load(self, root: str) -> None:
-        for pak_path, pak in iter_pak_files(root):
-            for info in pak.infolist():
-                str_path = pathlib.PureWindowsPath(info.filename)
-                if str_path.suffix.lower() == ".str":
-                    with pak.open(info, "r") as fp:
-                        assert fp.read(2) == b"\xff\xfe"  # BOM
-                        for lineno, line in enumerate(
-                            io.TextIOWrapper(fp, encoding="utf-16-le"),
-                            start=1,
-                        ):
-                            m = self.line_regex.match(line)
-                            if m is None:
-                                self.logger.error(
-                                    "cannot parse line %r in %s: %s at line %d"
-                                    % (line, str(pak_path), str(str_path), lineno)
-                                )
-                                continue
-                            key = self.unescape_string(m[1])
-                            value = self.unescape_string(m[2])
-                            variants = self.strings.setdefault(key, {})
-                            variant = (pak_path, str_path)
-                            if variants.get(variant, value) != value:
-                                self.logger.error(
-                                    "multiple different definitions of %r in %s: %s: %r, %r; overwriting",
-                                    key,
-                                    *variant,
-                                    variants[variant],
-                                    value,
-                                )
-                            elif variant in variants:
-                                assert variants[variant] == value
-                                self.logger.info(
-                                    "duplicate string definition %r in %s: %s",
-                                    key,
-                                    *variant,
-                                )
-                            variants[variant] = value
-
-    @property
-    def languages(self) -> Set[Tuple[pathlib.Path, pathlib.PureWindowsPath]]:
-        languages = set()
-        for key, variants in self.strings.items():
-            for variant in variants:
-                languages.add(variant)
-        return languages
-
-    def __getitem__(self, key: str) -> str:
-        variants = self.strings[key]
-        for (pak_path, str_path), value in variants.items():
-            if (
-                self.language[0] is None or pak_path == self.language[0]
-            ) and str_path == self.language[1]:
-                return value
-        try:
-            return next(iter(variants.values()))
-        except StopIteration:
-            raise KeyError
-
-    def __iter__(self) -> Iterator[str]:
-        return iter(self.strings)
-
-
-class FallbackHTMLParser(html.parser.HTMLParser):
-    """``html.parser.Parser`` handles duplicate attributes."""
-    logger = globals()["logger"].getChild("FallbackHTMLParser")  # type: logging.Logger
-
-    def __init__(self, pak: pathlib.PurePath, name: pathlib.PureWindowsPath) -> None:
-        super().__init__()
-        self.pak = pak
-        self.name = name
-        self.stack = [
-            (ET.Element("root"), "\n"),
-        ]  # type: List[Tuple[ET.Element, str]]
-        self.prev = None  # type: Optional[ET.Element]
-
-    def handle_starttag(self, tag: str, attrs: List[Tuple[str, str]]) -> None:
-        elem = ET.Element(tag, dict(attrs), text="")
-        for i, (a, av) in enumerate(attrs):
-            double = [bv for b, bv in attrs[i + 1 :] if b == a]
-            if double:
-                self.logger.warning(
-                    "duplicate attribute %s, ignored %r, kept %r",
-                    a,
-                    [av] + double[:-1],
-                    double[-1],
-                )
-                assert elem.get(a) == double[-1], repr(elem.get(k))
-        parent, indent = self.stack[-1]
-        parent.append(elem)
-        if self.prev is None:
-            parent.text = indent
-        else:
-            self.prev.tail = indent
-            self.prev = None
-        self.stack.append((elem, indent + "  "))
-
-    def handle_startendtag(self, tag: str, attrs: List[Tuple[str, str]]) -> None:
-        if (
-            tag == "cloud"
-            and not attrs
-            and self.name == pathlib.PureWindowsPath("[media]\\classes\\skies\\sky_us_01_ttt.xml")
-        ):
-            # There is a bug in initial.pak: [media]/classes/skies/sky_us_01_ttt.xml
-            # with a misplaced <Cloud/> instead of </Cloud>.
-            self.logger.warning(
-                "handling misplaced <%s/> in %s: %s",
-                tag,
-                self.pak,
-                self.name,
-            )
-            self.handle_endtag(tag)
-        else:
-            super().handle_startendtag(tag, attrs)
-
-    def handle_endtag(self, tag: str) -> None:
-        popped, _ = self.stack.pop()
-        assert tag == popped.tag, "%r != %r\n%s" % (tag, popped.tag, ET.tostring(self.stack[0][0], encoding="unicode"))
-        if self.prev is not None:
-            _, indent = self.stack[-1]
-            self.prev.tail = indent
-        self.prev = popped
-
-
-def parse_html(
-    data: bytes,
-    pak: pathlib.PurePath,
-    name: pathlib.PureWindowsPath,
-) -> List[ET.Element]:
-    parser = FallbackHTMLParser(pak, name)
-    try:
-        parser.feed(data.decode("utf-8"))
-    finally:
-        parser.close()
-    assert len(parser.stack) == 1, (
-        "unexpected element stack:\n"
-        + "\n".join(ET.tostring(e, encoding="unicode") for e, _ in parser.stack),
-    )
-    return parser.stack[0][0].findall("./*")
-
-
-def lowercase_element_recursive(elem: ET.Element) -> ET.Element:
-    new = ET.Element(
-        elem.tag.lower(),
-        attrib=dict((k.lower(), v) for k, v in elem.items()),
-    )
-    if elem.text is not None:
-        new.text = elem.text
-    if elem.tail is not None:
-        new.tail = elem.tail
-    for c in elem.iterfind("./*"):
-        new.append(lowercase_element_recursive(c))
-    return new
-
-
-def parse_xml(data: bytes, pak: str, name: str) -> List[ET.Element]:
-    try:
-        root = ET.fromstring(b"<root>\n" + data + b"</root>")
-        return [lowercase_element_recursive(e) for e in root.iterfind("./*")]
-    except ET.ParseError:
-        return parse_html(b"\n" + data, pak, name)
-
-
-def iter_xml_data(root: str) -> Iterator[
-    Tuple[
-        List[ET.Element],
-        pathlib.Path,
-        pathlib.PureWindowsPath,
-    ]
-]:
-    for pak_path, pak in iter_pak_files(root):
-        for info in pak.infolist():
-            xml_path = pathlib.PureWindowsPath(info.filename)
-            if xml_path.suffix.lower() == ".xml":
-                with pak.open(info, "r") as fp:
-                    data = fp.read().replace(b"\r\n", b"\n")
-                    try:
-                        elems = parse_xml(data, pak_path, xml_path)
-                    except:
-                        with open("/tmp/error.xml", "wb") as fp2:
-                            fp2.write(b"<!-- ")
-                            fp2.write(str(pak_path).encode("utf-8"))
-                            fp2.write(b": ")
-                            fp2.write(str(xml_path).encode("utf-8"))
-                            fp2.write(b" -->\n")
-                            fp2.write(data)
-                        raise
-                    else:
-                        yield (elems, pak_path, xml_path)
-'''
-
-T = TypeVar("T", bound="Base")
+T_Base = TypeVar("T_Base", bound="Base")
 
 
 class Base(object):
     tag: ClassVar[str]
 
     @classmethod
-    def none(cls: Type[T]) -> T:
+    def none(cls: Type[T_Base]) -> T_Base:
         kwargs = dict(
             (f.name, None if f.default is dataclasses.MISSING else f.default)
-            for f in dataclasses.fields(cls)
+            for f in dataclasses.fields(cls)  # type: ignore[arg-type]
         )
         return cls(**kwargs)
 
     @classmethod
     def from_xml(
-        cls: Type[T],
+        cls: Type[T_Base],
         elem: ET.Element,
         templates: "TemplateDict",
-    ) -> T:
+    ) -> T_Base:
         template_name = elem.get("_template")
         if template_name is None:
             base = cls.none()
@@ -316,22 +71,37 @@ class Base(object):
                 )
         return base
 
+    def asdict_non_recursive(self):
+        T = TypedDict(
+            type(self).__name__,
+            dict((f.name, f.type) for f in dataclasses.fields(self)),
+        )
+        return cast(
+            T, dict((f.name, getattr(self, f.name)) for f in dataclasses.fields(self))
+        )
+
+
+T_DecimalAttributes = TypeVar("T_DecimalAttributes", bound="DecimalAttributes")
+
 
 class DecimalAttributes(Base):
+    """``decimal_attributes`` contains names of XML attributes that are
+    converted to ``Decimal`` and stored as the object's attributes.
+    """
+
     decimal_attributes: ClassVar[Iterable[str]]
 
     @classmethod
     def from_xml(
-        cls: Type[T],
+        cls: Type[T_DecimalAttributes],
         elem: ET.Element,
         templates: "TemplateDict",
-    ) -> T:
-        base = super().from_xml(elem, templates)
-        new = {}
-        for attr in cls.decimal_attributes:
-            new[attr] = elem.get(attr)
-        replace = dict((k, Decimal(v)) for k, v in new.items() if v is not None)
-        self = dataclasses.replace(base, **replace)
+    ) -> T_DecimalAttributes:
+        self = super().from_xml(elem, templates)
+        for k in cls.decimal_attributes:
+            v = elem.get(k)
+            if v is not None:
+                self = dataclasses.replace(self, **{k: Decimal(v)})  # type: ignore
         # assert all(
         #     getattr(self, a) is not None
         #     for a in cls.decimal_attributes
@@ -358,35 +128,43 @@ class WheelSoftness(DecimalAttributes):
     SoftForceScale: Decimal
 
 
+T_TruckTireTemplate = TypeVar("T_TruckTireTemplate", bound="TruckTireTemplate")
+
+
 @dataclass
 class TruckTireTemplate(DecimalAttributes):
     tag = "TruckTire"
     decimal_attributes = ("Mass", "RearMassScale")
 
     Mass: Decimal
-    RearMassScale: Decimal = dataclasses.field(default=Decimal(1), kw_only=True)
     WheelFriction: Optional[WheelFriction]
     WheelSoftness: Optional[WheelSoftness]
+    RearMassScale: Decimal = dataclasses.field(default=Decimal(1), kw_only=True)
 
     @classmethod
     def from_xml(
-        cls: Type[T],
+        cls: Type[T_TruckTireTemplate],
         elem: ET.Element,
         templates: "TemplateDict",
-    ) -> T:
-        base = super().from_xml(elem, templates)
-
-        replace = {}
+    ) -> T_TruckTireTemplate:
+        self = super().from_xml(elem, templates)
 
         wf = elem.find("./WheelFriction")
         if wf is not None:
-            replace["WheelFriction"] = WheelFriction.from_xml(wf, templates)
+            self = dataclasses.replace(
+                self, WheelFriction=WheelFriction.from_xml(wf, templates)
+            )
 
         ws = elem.find("./WheelSoftness")
         if ws is not None:
-            replace["WheelSoftness"] = WheelSoftness.from_xml(ws, templates)
+            self = dataclasses.replace(
+                self, WheelSoftness=WheelSoftness.from_xml(ws, templates)
+            )
 
-        return dataclasses.replace(base, **replace)
+        return self
+
+
+T_TruckTire = TypeVar("T_TruckTire", bound="TruckTire")
 
 
 @dataclass
@@ -394,20 +172,19 @@ class TruckTire(TruckTireTemplate):
     Name: str
     UiName: str
     Price: int
+    WheelFriction: WheelFriction
 
     @classmethod
     def from_xml(
-        cls: Type[T],
+        cls: Type[T_TruckTire],
         elem: ET.Element,
         templates: "TemplateDict",
-    ) -> T:
-        base = super().from_xml(elem, templates)
-
-        replace = {}
+    ) -> T_TruckTire:
+        self = super().from_xml(elem, templates)
 
         name = elem.get("Name")
         if name is not None:
-            replace["Name"] = name
+            self = dataclasses.replace(self, Name=name)
 
         gamedata = elem.find("./GameData")
         if gamedata is not None:
@@ -415,18 +192,18 @@ class TruckTire(TruckTireTemplate):
             if uidesc is not None:
                 uiname = uidesc.get("UiName")
                 if uiname is not None:
-                    replace["UiName"] = uiname
+                    self = dataclasses.replace(self, UiName=uiname)
 
             price = gamedata.get("Price")
             if price is not None:
-                replace["Price"] = int(price, 10)
+                self = dataclasses.replace(self, Price=int(price, 10))
 
-        self = dataclasses.replace(base, **replace)
-        # assert (
-        #     self.Name is not None
-        #     # and self.UiName is not None
-        #     # and self.Price is not None
-        # ), "%r has None attributes: %s" % (self, ET.tostring(elem, encoding="unicode"))
+        assert (
+            self.Name
+            is not None
+            # and self.UiName is not None
+            # and self.Price is not None
+        ), "%r has None attributes: %s" % (self, ET.tostring(elem, encoding="unicode"))
         return self
 
 
@@ -449,11 +226,16 @@ class EngineTemplate(DecimalAttributes):
     DamageCapacity: Decimal
     EngineResponsiveness: Decimal
     FuelConsumption: Decimal
-    DamagedConsumptionModifier: Decimal = dataclasses.field(default=Decimal(1), kw_only=True)
     Torque: Decimal
     DamagedMinTorqueMultiplier: Decimal
     DamagedMaxTorqueMultiplier: Decimal
     MaxDeltaAngVel: Decimal
+    DamagedConsumptionModifier: Decimal = dataclasses.field(
+        default=Decimal(1), kw_only=True
+    )
+
+
+T_Engine = TypeVar("T_Engine", bound="Engine")
 
 
 @dataclass
@@ -463,10 +245,10 @@ class Engine(EngineTemplate):
 
     @classmethod
     def from_xml(
-        cls: Type[T],
+        cls: Type[T_Engine],
         elem: ET.Element,
         templates: "TemplateDict",
-    ) -> T:
+    ) -> T_Engine:
         self = super().from_xml(elem, templates)
 
         name = elem.get("Name")
@@ -482,11 +264,13 @@ class Engine(EngineTemplate):
                     self = dataclasses.replace(self, UiName=uiname)
 
         assert (
-            self.Name is not None
-            and self.UiName is not None
+            self.Name is not None and self.UiName is not None
         ), "%r has None attributes: %s" % (self, ET.tostring(elem, encoding="unicode"))
 
         return self
+
+
+T_CompatibleWheels = TypeVar("T_CompatibleWheels", bound="CompatibleWheels")
 
 
 @dataclass
@@ -494,25 +278,31 @@ class CompatibleWheels(DecimalAttributes):
     tag = "CompatibleWheels"
     decimal_attributes = ("OffsetZ", "Scale")
 
-    OffsetZ: Decimal = dataclasses.field(default=Decimal(0), kw_only=True)
     Scale: Decimal
     Type: str
     Tires: List[TruckTire]
+    OffsetZ: Decimal = dataclasses.field(default=Decimal(0), kw_only=True)
 
     @classmethod
-    def from_xml(
-        cls: Type[T],
+    def from_xml(  # type: ignore[override]
+        cls: Type[T_CompatibleWheels],  # type: ignore[valid-type] # FIXME
         elem: ET.Element,
         templates: "TemplateDict",
         tires: Dict[str, Dict[str, TruckTire]],
-    ) -> T:
-        self = super().from_xml(elem, templates)
+    ) -> T_CompatibleWheels:
+        self = super().from_xml(elem, templates)  # type: ignore # FIXME
         type = elem.get("Type")
         if type is not None:
             self = dataclasses.replace(self, Type=type)
-        assert self.Type is not None, "%r has None attributes: %s" % (self, ET.tostring(elem, encoding="unicode"))
+        assert self.Type is not None, "%r has None attributes: %s" % (
+            self,
+            ET.tostring(elem, encoding="unicode"),
+        )
         self.Tires = list(tires[self.Type].values())
         return self
+
+
+T_EngineSocket = TypeVar("T_EngineSocket", bound="EngineSocket")
 
 
 @dataclass
@@ -520,17 +310,17 @@ class EngineSocket(Base):
     tag = "EngineSocket"
 
     Default: str
-    Type: str
+    Type: List[str]
     Engines: List[Engine]
 
     @classmethod
-    def from_xml(
-        cls: Type[T],
+    def from_xml(  # type: ignore[override]
+        cls: Type[T_EngineSocket],  # type: ignore[valid-type] # FIXME
         elem: ET.Element,
         templates: "TemplateDict",
         engines: Dict[str, Dict[str, Engine]],
-    ) -> T:
-        self = super().from_xml(elem, templates)
+    ) -> T_EngineSocket:
+        self = super().from_xml(elem, templates)  # type: ignore # FIXME
 
         default = elem.get("Default")
         if default is not None:
@@ -538,18 +328,20 @@ class EngineSocket(Base):
 
         type = elem.get("Type")
         if type is not None:
-            self = dataclasses.replace(self, Type=type)
+            self = dataclasses.replace(self, Type=[t.strip() for t in type.split(",")])
 
         assert (
-            self.Default is not None
-            and self.Type is not None
+            self.Default is not None and self.Type is not None
         ), "%r has None attributes: %s" % (self, ET.tostring(elem, encoding="unicode"))
 
         self.Engines = []
-        for t in self.Type.split(","):
-            self.Engines.extend(engines[t.strip()].values())
+        for t in self.Type:
+            self.Engines.extend(engines[t].values())
 
         return self
+
+
+T_Truck = TypeVar("T_Truck", bound="Truck")
 
 
 @dataclass
@@ -558,29 +350,30 @@ class Truck(Base):
 
     UiName: str
     Price: int
-    CompatibleWheels: List[str]
+    CompatibleWheels: List[CompatibleWheels]
     EngineSocket: List[EngineSocket]
 
     @classmethod
-    def from_xml(
-        cls: Type[T],
+    def from_xml(  # type: ignore[override]
+        cls: Type[T_Truck],
         elem: ET.Element,
         templates: "TemplateDict",
         engines: Dict[str, Dict[str, Engine]],
         tires: Dict[str, Dict[str, TruckTire]],
-    ) -> T:
-        base = super().from_xml(elem, templates)
+    ) -> T_Truck:
+        self = super().from_xml(elem, templates)
 
-        replace = {
-            "CompatibleWheels": [
+        self = dataclasses.replace(
+            self,
+            CompatibleWheels=[
                 CompatibleWheels.from_xml(w, templates, tires)
                 for w in elem.iterfind("./TruckData/CompatibleWheels")
             ],
-            "EngineSocket": [
+            EngineSocket=[
                 EngineSocket.from_xml(e, templates, engines)
                 for e in elem.iterfind("./TruckData/EngineSocket")
             ],
-        }
+        )
 
         gamedata = elem.find("./GameData")
         if gamedata is not None:
@@ -593,25 +386,26 @@ class Truck(Base):
 
                 uiname = uidesc.get("UiName")
                 if uiname is not None:
-                    replace["UiName"] = uiname
+                    self = dataclasses.replace(self, UiName=uiname)
 
             price = gamedata.get("Price")
             if price is not None:
-                replace["Price"] = int(price, 10)
+                self = dataclasses.replace(self, Price=int(price, 10))
 
-        self = dataclasses.replace(base, **replace)
         assert (
-            self.UiName is not None
-            and self.CompatibleWheels is not None
+            self.UiName is not None and self.CompatibleWheels is not None
         ), "%r has None attributes: %s" % (self, ET.tostring(elem, encoding="unicode"))
         return self
 
 
+# === GAME DATA LOADERS ================================================
+
+
 @contextmanager
 def load_xml_with_error(
-    data: str,
-    pak_path: Optional[pathlib.PurePath] = None,
-    xml_path: Optional[pathlib.PureWindowsPath] = None,
+    data: bytes,
+    pak_path: Optional[PurePath] = None,
+    xml_path: Optional[PureWindowsPath] = None,
 ) -> Iterator[List[ET.Element]]:
     def repl(m: re.Match) -> bytes:
         return m[1] + b"_" + m[2]
@@ -619,7 +413,7 @@ def load_xml_with_error(
     try:
         # expat interprets every \n or \r as a line break
         xdata = data.replace(b"\r\n", b"\n")
-        # remove 
+        # remove namespace
         xdata = re.sub(rb"(</?region):(default|cis)\b", repl, xdata)
         root = ET.fromstring(b"<root>\n" + xdata + b"</root>")
         yield root.findall("./*")
@@ -637,15 +431,14 @@ def load_xml_with_error(
         raise
 
 
-T = TypeVar("T", bound=Base)
-TemplateDict = Dict[Type[T], Dict[str, T]]
+TemplateDict = Dict[Type[T_Base], Dict[str, T_Base]]
 
 template_factories = [
     EngineTemplate,
     TruckTireTemplate,
     WheelFriction,
     WheelSoftness,
-]  # type: List[Type[T]]
+]  # type: List[Any]
 
 
 def load_templates(
@@ -653,6 +446,7 @@ def load_templates(
     templates: Optional[TemplateDict] = None,
     assert_include: Optional[str] = None,
 ) -> TemplateDict:
+    """Load <_template> tags."""
     templates = (
         {} if templates is None else dict((k, v.copy()) for k, v in templates.items())
     )
@@ -664,18 +458,20 @@ def load_templates(
                     assert elem.tag not in templates.get(
                         cls, {}
                     ), "duplicate template %s/%s" % (cls.tag, elem.tag)
-                    templates.setdefault(cls, {})[elem.tag] = cls.from_xml(elem, templates)
+                    templates.setdefault(cls, {})[elem.tag] = cls.from_xml(
+                        elem, templates
+                    )
     return templates
 
 
-def iter_load_templates_dir(
+def iter_load_dir_templates(
     pak: zipfile.ZipFile,
-    filter: Callable[[pathlib.PureWindowsPath], bool],
+    filter: Callable[[PureWindowsPath], bool],
     templates: TemplateDict,
     assert_include: Optional[str] = None,
-) -> Iterator[Tuple[pathlib.PureWindowsPath, bytes, TemplateDict]]:
+) -> Iterator[Tuple[PureWindowsPath, List[ET.Element], TemplateDict]]:
     for info in pak.infolist():
-        path = pathlib.PureWindowsPath(info.filename)
+        path = PureWindowsPath(info.filename)
         if filter(path):
             with pak.open(info, "r") as fp:
                 with load_xml_with_error(fp.read()) as roots:
@@ -683,171 +479,75 @@ def iter_load_templates_dir(
                     yield (path, roots, file_templates)
 
 
-def create_filter(
-    prefix: pathlib.PureWindowsPath,
-    infix: pathlib.PureWindowsPath,
-) -> Callable[[pathlib.PureWindowsPath], bool]:
-    def filter(p: pathlib.PureWindowsPath) -> bool:
+def create_dlc_filter(
+    prefix: PureWindowsPath,
+    infix: PureWindowsPath,
+) -> Callable[[PureWindowsPath], bool]:
+    def filter(p: PureWindowsPath) -> bool:
         if prefix / infix in p.parents:
             return True
         if prefix / "_dlc" not in p.parents:
             return False
         dlc_base = p.parents[-4]  # [-1] == .
-        assert dlc_base.parent == prefix / "_dlc", (
-            "%r != %r"
-            % (dlc_base.parent, prefix / "_dlc")
+        assert dlc_base.parent == prefix / "_dlc", "%r != %r" % (
+            dlc_base.parent,
+            prefix / "_dlc",
         )
         return p.is_relative_to(dlc_base / infix)
 
     return filter
 
 
-def asdict_non_recursive(x):
-    return dict(
-        (f.name, getattr(x, f.name)) for f in dataclasses.fields(x)
-    )
+T_DataBase = TypeVar("T_DataBase", bound="DataBase")
 
 
-def load_engines(
-    roots: Iterable[ET.Element],
-    templates: TemplateDict,
-) -> Dict[str, TruckTire]:
-    engines = {}  # Dict[str, List[Engine]]
-    for root in roots:
-        if root.tag == "EngineVariants":
-            for child in root.iterfind(f"./{Engine.tag}"):
-                e = Engine.from_xml(child, templates)
-                assert e.Name not in engines
-                engines[e.Name] = e
-    return engines
+@dataclass
+class DataBase(object):
+    """Data base class not database."""
 
+    @classmethod
+    def load(
+        cls: Type[T_DataBase],
+        initial_pak: Union[str | os.PathLike[str]],
+    ) -> T_DataBase:
+        """Open *initial_pak* and load game data."""
+        pak_path = Path(initial_pak)
+        with zipfile.ZipFile(pak_path, "r") as pak:
+            return cls._load(pak_path, pak)
 
-def load_all_engines(
-    pak: zipfile.ZipFile,
-    templates: TemplateDict,
-) -> Dict[str, Dict[str, TruckTire]]:
-    all_engines = {}  # type: Dict[str, List[TruckTire]]
-    for path, roots, file_templates in iter_load_templates_dir(
-        pak,
-        create_filter(
-            pathlib.PureWindowsPath("[media]"),
-            pathlib.PureWindowsPath("classes") / "engines",
-        ),
-        templates,
-    ):
-        file_templates[Engine] = dict(
-            (k, dataclasses.replace(Engine.none(), **asdict_non_recursive(v)))
-            for k, v in file_templates.get(EngineTemplate, {}).items()
+    @classmethod
+    def _load(
+        cls: Type[T_DataBase],
+        pak_path: Path,
+        pak: zipfile.ZipFile,
+    ) -> T_DataBase:
+        """This method is called by ``load`` to actually load the game data.
+        It is overriden in sub-classes.
+        """
+        return DataBase()  # type: ignore
+
+    def asdict_non_recursive(self):
+        T = TypedDict(
+            type(self).__name__,
+            dict((f.name, f.type) for f in dataclasses.fields(self)),
         )
-        file_Engine = load_engines(roots, file_templates)
-        assert path.stem not in all_engines
-        all_engines[path.stem] = file_Engine
-    return all_engines
-
-
-def load_tires(
-    roots: Iterable[ET.Element],
-    templates: TemplateDict,
-) -> Dict[str, TruckTire]:
-    tires = {}  # Dict[str, TruckTire]
-    for root in roots:
-        if root.tag == "TruckWheels":
-            for child in root.iterfind(f"./TruckTires/{TruckTire.tag}"):
-                t = TruckTire.from_xml(child, templates)
-                assert t.Name not in tires
-                tires[t.Name] = t
-    return tires
-
-
-def load_all_tires(
-    pak: zipfile.ZipFile,
-    templates: TemplateDict,
-) -> Dict[str, Dict[str, TruckTire]]:
-    all_tires = {}  # type: Dict[str, List[TruckTire]]
-    for path, roots, file_templates in iter_load_templates_dir(
-        pak,
-        create_filter(
-            pathlib.PureWindowsPath("[media]"),
-            pathlib.PureWindowsPath("classes") / "wheels",
-        ),
-        templates,
-        assert_include="trucks",
-    ):
-        file_templates[TruckTire] = dict(
-            (k, dataclasses.replace(TruckTire.none(), **asdict_non_recursive(v)))
-            for k, v in file_templates.get(TruckTireTemplate, {}).items()
+        return cast(
+            T, dict((f.name, getattr(self, f.name)) for f in dataclasses.fields(self))
         )
-        file_tires = load_tires(roots, file_templates)
-        assert path.stem not in all_tires
-        all_tires[path.stem] = file_tires
-    return all_tires
 
 
-def load_trucks(
-    roots: Iterable[ET.Element],
-    templates: TemplateDict,
-    engines: Dict[str, Dict[str, Engine]],
-    tires: Dict[str, Dict[str, TruckTire]],
-) -> Dict[str, Truck]:
-    trucks = {}  # Dict[str, TruckTire]
-    for root in roots:
-        if root.tag == Truck.tag:
-            t = Truck.from_xml(
-                root,
-                templates,
-                engines=engines,
-                tires=tires,
-            )
-            assert t.UiName not in trucks
-            trucks[t.UiName] = t
-    return trucks
+@dataclass
+class StringData(DataBase):
+    strings: Dict[str, str]
 
-
-def load_all_trucks(
-    pak: zipfile.ZipFile,
-    templates: TemplateDict,
-    engines: Dict[str, Dict[str, Engine]],
-    tires: Dict[str, Dict[str, TruckTire]],
-) -> Dict[str, List[TruckTire]]:
-    all_trucks = {}  # type: Dict[str, List[TruckTire]]
-    for _, roots, file_templates in iter_load_templates_dir(
-        pak,
-        create_filter(
-            pathlib.PureWindowsPath("[media]"),
-            pathlib.PureWindowsPath("classes") / "trucks",
-        ),
-        templates,
-    ):
-        file_trucks = load_trucks(
-            roots,
-            file_templates,
-            engines=engines,
-            tires=tires,
-        )
-        for k, v in file_trucks.items():
-            all_trucks.setdefault(k, []).append(v)
-    return all_trucks
-
-
-class Strings(object):
-    logger = globals()["logger"].getChild("Strings")  # type: logging.Logger
-
+    logger = globals()["logger"].getChild("StringData")
     string_escape = r'\\[n"\\]'
     string_regex = f'[\\w.,]+|"(?:[^"\\\\]|{string_escape})*"'
     line_regex = re.compile(f"^\\s*({string_regex})\\s+({string_regex})\\s*$")
+    str_path = PureWindowsPath("[strings]") / "strings_english.str"
 
-    def __init__(self, root: str):
-        self.strings = (
-            {}
-        )  # type: Dict[str, Dict[Tuple[pathlib.Path, pathlib.PureWindowsPath], str]]
-        self.language = (
-            None,
-            pathlib.PureWindowsPath("[strings]") / "strings_english.str",
-        )  # type: Tuple[Optional[pathlib.Path], pathlib.PureWindowsPath]
-        self.load(root)
-
-    @classmethod
-    def unescape_string(cls, x: str) -> str:
+    @staticmethod
+    def unescape_string(x: str) -> str:
         def repl(m: re.Match) -> str:
             escapes = {
                 "\\n": "\n",
@@ -861,214 +561,254 @@ class Strings(object):
 
         if x.startswith('"'):
             assert x.endswith('"')
-            return re.sub(cls.string_escape, repl, x[1:-1])
+            return re.sub(StringData.string_escape, repl, x[1:-1])
         else:
             return x
 
+    @staticmethod
+    def load_strings(
+        fp: IO[bytes],
+        pak_path: Path,
+        str_path: PureWindowsPath,
+    ) -> Dict[str, str]:
+        strings = {}  # type: Dict[str, Tuple[int, str]]
+        assert fp.read(2) == b"\xff\xfe"  # BOM
+        for lineno, line in enumerate(
+            io.TextIOWrapper(fp, encoding="utf-16le"),
+            start=1,
+        ):
+            m = StringData.line_regex.match(line)
+            if m is None:
+                StringData.logger.error(
+                    "%s:%s:%d: cannot parse %r" % (pak_path, str_path, lineno, line)
+                )
+                continue
+            key = StringData.unescape_string(m[1])
+            value = StringData.unescape_string(m[2])
+            if strings.get(key, (0, value))[1] != value:
+                StringData.logger.error(
+                    "%s:%s:%d: redefinition of %r as %r, already defined at line %s as %r, overwriting...",
+                    pak_path,
+                    str_path,
+                    lineno,
+                    key,
+                    value,
+                    *strings[key],
+                )
+            elif key in strings:
+                assert strings[key][1] == value
+                StringData.logger.warning(
+                    "%s:%s:%d: duplicate identical definition of %r as %r, previously at %d",
+                    pak_path,
+                    str_path,
+                    lineno,
+                    key,
+                    value,
+                    strings[key][0],
+                )
+            strings[key] = (lineno, value)
+        return dict((k, v[1]) for k, v in strings.items())
+
     @classmethod
-    def load(cls, pak: zipfile.ZipFile, path: pathlib.PureWindowsPath) -> Dict[str, str]:
-        strings = {}
-        with pak.open(str(path), "r") as fp:
-            assert fp.read(2) == b"\xff\xfe"  # BOM
-            for lineno, line in enumerate(
-                io.TextIOWrapper(fp, encoding="utf-16le"),
-                start=1,
-            ):
-                m = cls.line_regex.match(line)
-                if m is None:
-                    cls.logger.error(
-                        "cannot parse line %r in %s at line %d"
-                        % (line, path, lineno)
-                    )
-                    continue
-                key = cls.unescape_string(m[1])
-                value = cls.unescape_string(m[2])
-                if strings.get(key, value) != value:
-                    cls.logger.error(
-                        "multiple different definitions of %r in %s: %r, %r; overwriting",
-                        key,
-                        path,
-                        strings[key],
-                        value,
-                    )
-                elif key in strings:
-                    assert strings[key] == value
-                    cls.logger.warning("duplicate string definition %r in %s", key, path)
-                strings[key] = value
-        return strings
+    def _load(
+        cls,
+        pak_path: Path,
+        pak: zipfile.ZipFile,
+    ) -> "StringData":
+        base = super()._load(pak_path, pak)
+        with pak.open(str(cls.str_path), "r") as fp:
+            return StringData(
+                strings=cls.load_strings(fp, pak_path, cls.str_path),
+                **base.asdict_non_recursive(),
+            )
 
 
-class Data(TypedDict):
-    tires: Dict[str, List[TruckTire]]
-    trucks: Dict[str, List[Truck]]
-    strings: Dict[str, str]
+@dataclass
+class EngineData(StringData):
+    """*engines* is indexed by the basename of the file they were read from
+    (without file extension) first, and by the engines *Name* second.
+    """
+
+    engines: Dict[str, Dict[str, Engine]]
+
+    @staticmethod
+    def load_engines(
+        roots: Iterable[ET.Element],
+        templates: TemplateDict,
+    ) -> Dict[str, Engine]:
+        engines = {}  # Dict[str, List[Engine]]
+        for root in roots:
+            if root.tag == "EngineVariants":
+                for child in root.iterfind(f"./{Engine.tag}"):
+                    e = Engine.from_xml(child, templates)
+                    assert e.Name not in engines
+                    engines[e.Name] = e
+        return engines
+
+    @classmethod
+    def _load(
+        cls,
+        pak_path: Path,
+        pak: zipfile.ZipFile,
+    ) -> "EngineData":
+        base = super()._load(pak_path, pak)
+
+        all_engines = {}  # type: Dict[str, Dict[str, Engine]]
+        for path, roots, file_templates in iter_load_dir_templates(
+            pak,
+            create_dlc_filter(
+                PureWindowsPath("[media]"),
+                PureWindowsPath("classes") / "engines",
+            ),
+            {},  # engines do not rely on truck_templates
+        ):
+            file_templates[Engine] = {}
+            for k, v in file_templates.get(EngineTemplate, {}).items():
+                file_templates[Engine][k] = dataclasses.replace(
+                    Engine.none(), **v.asdict_non_recursive()
+                )
+
+            file_Engine = cls.load_engines(roots, file_templates)
+            assert path.stem not in all_engines
+            all_engines[path.stem] = file_Engine
+
+        return EngineData(engines=all_engines, **base.asdict_non_recursive())
 
 
-def load_data(initial_pak: str) -> Data:
-    pak_path = pathlib.Path(initial_pak)
-    with zipfile.ZipFile(pak_path, "r") as pak:
-        path = pathlib.PureWindowsPath("[media]") / "_templates" / "trucks.xml"
+@dataclass
+class TemplateData(EngineData):
+    truck_templates: TemplateDict
+
+    @classmethod
+    def _load(
+        cls,
+        pak_path: Path,
+        pak: zipfile.ZipFile,
+    ) -> "TemplateData":
+        base = super()._load(pak_path, pak)
+        path = PureWindowsPath("[media]") / "_templates" / "trucks.xml"
         with pak.open(str(path), "r") as fp:
             with load_xml_with_error(fp.read(), pak_path, path) as roots:
-                truck_templates = load_templates(roots)
+                return TemplateData(
+                    truck_templates=load_templates(roots),
+                    **base.asdict_non_recursive(),
+                )
 
-        tires = load_all_tires(pak, truck_templates)
-        engines = load_all_engines(pak, {})
-        return {
-            "tires": tires,
-            "trucks": load_all_trucks(
-                pak,
-                {},
-                engines=engines,
-                tires=tires,
+
+@dataclass
+class TireData(TemplateData):
+    """*tires* is indexed by the basename of the file they were read from
+    (without file extension) first, and by the tires *Name* second.
+    """
+
+    tires: Dict[str, Dict[str, TruckTire]]
+
+    @staticmethod
+    def load_tires(
+        roots: Iterable[ET.Element],
+        templates: TemplateDict,
+    ) -> Dict[str, TruckTire]:
+        tires = {}  # Dict[str, TruckTire]
+        for root in roots:
+            if root.tag == "TruckWheels":
+                for child in root.iterfind(f"./TruckTires/{TruckTire.tag}"):
+                    t = TruckTire.from_xml(child, templates)
+                    assert t.Name not in tires
+                    tires[t.Name] = t
+        return tires
+
+    @classmethod
+    def _load(
+        cls,
+        pak_path: Path,
+        pak: zipfile.ZipFile,
+    ) -> "TireData":
+        base = super()._load(pak_path, pak)
+
+        all_tires = {}  # type: Dict[str, Dict[str, TruckTire]]
+        for path, roots, file_templates in iter_load_dir_templates(
+            pak,
+            create_dlc_filter(
+                PureWindowsPath("[media]"),
+                PureWindowsPath("classes") / "wheels",
             ),
-            "strings": Strings.load(pak, pathlib.PureWindowsPath("[strings]") / "strings_english.str"),
-        }
-
-
-"""
-class XMLStructure(TypedDict):
-    attribs: Set[str]
-    children: Set[str]
-    parents: Set[str]
-    src: Dict[str, Set[str]]
-
-
-def get_xml_structure(root: str) -> Dict[str, XMLStructure]:
-    structure = {}  # type: XMLStructure
-    for elems, pak, name in iter_xml_data(root):
-        for e in elems:
-            for e in e.iter():
-                for k, v in e.items():
-                    x = structure.setdefault(e.tag, {})
-                    x.setdefault("attribs", set()).add(k)
-                    for c in e.iterfind("./*"):
-                        x.setdefault("children", set()).add(c.tag)
-                        structure.setdefault(c.tag, {}).setdefault(
-                            "parents", set()
-                        ).add(e.tag)
-                    x.setdefault("src", {}).setdefault(pak.name, set()).add(str(name))
-    return structure
-"""
-
-
-def xml_escape(x: str) -> str:
-    def repl(m: re.Match) -> str:
-        return "&#%d;" % ord(m[0])
-
-    return re.sub(r"[^\n !#$%(-;=?-~]", repl, x)
-
-
-def json_decimal_default(x):
-    if isinstance(x, Decimal):
-        return float(x)
-    else:
-        raise TypeError
-
-
-def draw_engine_chart(engines: List[Engine], strings: Dict[str, str]) -> str:
-    labels = []
-    torques = []
-    for e in sorted(engines, key=lambda e: e.Torque):
-        labels.append(strings.get(e.UiName, e.UiName))
-        torques.append(e.Torque)
-    if not labels:
-        return ""
-    id = str(uuid.uuid4())
-    return '''<h3>Engines</h3>
-<div class="engine-chart"><canvas id="%(id)s"></canvas><script>
-"use strict";
-document.addEventListener("DOMContentLoaded", async () => {
-    const elem = document.getElementById(%(json_id)s);
-    new Chart(elem, %(json_data)s);
-});
-</script></div>''' % {
-    "id": id,
-    "json_id": json.dumps(id),
-    "json_data": json.dumps(
-        {
-            "type": "bar",
-            "data": {
-                "labels": labels,
-                "datasets": [
-                    {
-                        "label": "Torque",
-                        "data": torques,
-                    },
-                ],
-            },
-            "options": {
-                "scales": {
-                    "y": {
-                        "beginAtZero": True,
-                    },
-                },
-            },
-        },
-        default=json_decimal_default,
-    ),
-}
-
-
-def draw_tire_chart(tires: Iterable[TruckTire], strings: Dict[str, str]) -> str:
-    maximum = Decimal(3)
-    grouped_tires = {}  # type: Dict[Tuple[Decimal, Decimal, Decimal], List[str]]
-    for wheel in truck.CompatibleWheels:
-        for t in wheel.Tires:
-            k = (
-                t.WheelFriction.SubstanceFriction,
-                t.WheelFriction.BodyFriction,
-                t.WheelFriction.BodyFrictionAsphalt,
+            base.truck_templates,
+            assert_include="trucks",
+        ):
+            # "convert" ``file_templates[TruckTireTemplate]`` to
+            # ``file_templates[TruckTire]`` so the lookup in ``load_tires``
+            # works.
+            file_templates[TruckTire] = dict(
+                (k, dataclasses.replace(TruckTire.none(), **v.asdict_non_recursive()))
+                for k, v in file_templates.get(TruckTireTemplate, {}).items()
             )
-            grouped_tires.setdefault(k, set()).add(
-                strings.get(t.UiName, t.UiName),
+            file_tires = cls.load_tires(roots, file_templates)
+            assert path.stem not in all_tires
+            all_tires[path.stem] = file_tires
+
+        return TireData(tires=all_tires, **base.asdict_non_recursive())
+
+
+@dataclass
+class TruckData(TireData):
+    trucks: Dict[str, List[Truck]]
+
+    @staticmethod
+    def load_trucks(
+        roots: Iterable[ET.Element],
+        templates: TemplateDict,
+        engines: Dict[str, Dict[str, Engine]],
+        tires: Dict[str, Dict[str, TruckTire]],
+    ) -> Dict[str, Truck]:
+        trucks = {}  # Dict[str, TruckTire]
+        for root in roots:
+            if root.tag == Truck.tag:
+                t = Truck.from_xml(
+                    root,
+                    templates,
+                    engines=engines,
+                    tires=tires,
+                )
+                assert t.UiName not in trucks
+                trucks[t.UiName] = t
+        return trucks
+
+    @classmethod
+    def _load(
+        cls,
+        pak_path: Path,
+        pak: zipfile.ZipFile,
+    ) -> "TruckData":
+        base = super()._load(pak_path, pak)
+
+        all_trucks = {}  # type: Dict[str, List[Truck]]
+        for _, roots, file_templates in iter_load_dir_templates(
+            pak,
+            create_dlc_filter(
+                PureWindowsPath("[media]"),
+                PureWindowsPath("classes") / "trucks",
+            ),
+            {},
+        ):
+            file_trucks = cls.load_trucks(
+                roots,
+                file_templates,
+                engines=base.engines,
+                tires=base.tires,
             )
-            maximum = max(maximum, *k)
-    if not grouped_tires:
-        return ""
+            for k, v in file_trucks.items():
+                all_trucks.setdefault(k, []).append(v)
 
-    series = [
-        { "label": ", ".join(sorted(names)), "data": data, }
-        for data, names in reversed(sorted(grouped_tires.items()))
-    ]
-
-    xml = ['<h3>Tires</h3>\n<div class="tire-charts">']
-    for dataset in series:
-        id = str(uuid.uuid4())
-        xml.append(
-            '<div><canvas id="%(id)s"></canvas><script>drawChart(%(args)s);</script></div>' % {
-                "id": id,
-                "args": json.dumps(
-                    {
-                        "id": id,
-                        "datasets": [dataset],
-                        "max": maximum,
-                    },
-                    default=json_decimal_default,
-                ),
-            }
-        )
-    xml.append("</div>")
-    return "".join(xml)
+        return cls(trucks=all_trucks, **base.asdict_non_recursive())
 
 
-if __name__ == "__main__":
-    import sys
-
-    logging.basicConfig(
-        stream=sys.stderr,
-        level=logging.WARNING,
-        format="%(name)s %(levelname)-8s :%(lineno)-3d %(message)s",
-    )
-    # there are lots of "multiple different definitions"
-    Strings.logger.setLevel(logging.ERROR + 1)
-
-    data = load_data(
-        "/data/sata/steam/SteamLibrary/steamapps/common/SnowRunner/preload/paks/client/initial.pak"
-    )
-    with open(sys.stdout.fileno(), "w", encoding="ascii", closefd=False) as fp:
-        fp.write(
-            '''<style>
+class XMLOutput(object):
+    def __init__(self, stream: IO[str], strings: Dict[str, str]):
+        self.stream = stream
+        self.strings = strings
+        self.write_noescape(
+            """<script src="https://cdn.jsdelivr.net/npm/chart.js" defer=""></script>
+<style>
     .engine-chart, .tire-charts {
         min-height: 8em;
         max-height: 25vh;
@@ -1082,67 +822,222 @@ if __name__ == "__main__":
         padding-left: .5em;
     }
 </style>
-'''
+"""
         )
-        fp.write('<script src="https://cdn.jsdelivr.net/npm/chart.js" defer=""></script>')
-        fp.write("<script>\n")
-        fp.write(
-'''"use strict";
-function drawChart({ id, datasets, max }) {
-    document.addEventListener("DOMContentLoaded", async () => {
-        const elem = document.getElementById(id);
-        new Chart(elem, {
-            type: "radar",
-            data: {
-                labels: ["Mud", "Dirt", "Asphalt"],
-                datasets: datasets,
-            },
-            options: {
-                scales: {
-                    r: {
-                        min: 0,
-                        max: Math.ceil(max),
+
+    @staticmethod
+    def escape(x: str) -> str:
+        def repl(m: re.Match) -> str:
+            return "&#%d;" % ord(m[0])
+
+        return re.sub(r"[^\n !#$%(-;=?-~]", repl, x)
+
+    @staticmethod
+    def json_decimal_default(x):
+        if isinstance(x, Decimal):
+            return float(x)
+        else:
+            raise TypeError
+
+    def write_noescape(self, x: str) -> None:
+        self.stream.write(x)
+
+    def write(self, x: str) -> None:
+        self.write_noescape(self.escape(x))
+
+    def draw_chart(
+        self,
+        options,
+        *,
+        dom_content_loaded: bool = True,
+        klass: Optional[str] = None,
+    ) -> None:
+        id = str(uuid.uuid4())
+        self.write_noescape("<div")
+        if klass is not None:
+            self.write_noescape(' class="')
+            self.write(klass)
+            self.write_noescape('"')
+        self.write_noescape('><canvas id="')
+        self.write(id)
+        self.write_noescape('"></canvas><script>\n')
+        # for whatever reason HTML does not like it when we escape our script
+        self.write_noescape('"use strict";\n')
+        if dom_content_loaded:
+            self.write_noescape(
+                'document.addEventListener("DOMContentLoaded", async () => {\n'
+            )
+        self.write_noescape(
+            "    new Chart(document.getElementById(%s), %s);\n"
+            % (
+                json.dumps(id),
+                json.dumps(options, default=self.json_decimal_default),
+            )
+        )
+        if dom_content_loaded:
+            self.write_noescape("});\n")
+        self.write_noescape("</script></div>\n")
+
+    def draw_engine_chart(self, engines: Iterable[Engine]) -> None:
+        labels = []
+        torques = []
+        for e in sorted(engines, key=lambda e: e.Torque):
+            labels.append(self.strings.get(e.UiName, e.UiName))
+            torques.append(e.Torque)
+        if not labels:
+            return
+        self.draw_chart(
+            {
+                "type": "bar",
+                "data": {
+                    "labels": labels,
+                    "datasets": [
+                        {
+                            "label": "Torque",
+                            "data": torques,
+                        },
+                    ],
+                },
+                "options": {
+                    "scales": {
+                        "y": {
+                            "beginAtZero": True,
+                        },
                     },
                 },
             },
-        });
-    });
-}'''
+            klass="engine-chart",
         )
-        fp.write("\n</script>")
-        fp.write('<h1 id="trucks">')
-        fp.write(xml_escape("Trucks"))
-        fp.write("</h1>\n")
+
+    def draw_tire_charts(self, tires: Iterable[TruckTire]) -> None:
+        maximum = Decimal(3)
+        grouped_tires = {}  # type: Dict[Tuple[Decimal, Decimal, Decimal], Set[str]]
+        for t in tires:
+            k = (
+                t.WheelFriction.SubstanceFriction,
+                t.WheelFriction.BodyFriction,
+                t.WheelFriction.BodyFrictionAsphalt,
+            )
+            grouped_tires.setdefault(k, set()).add(self.strings.get(t.UiName, t.UiName))
+            maximum = max(maximum, *k)
+        if not grouped_tires:
+            return
+
+        series = [
+            {
+                "label": ", ".join(sorted(names)),
+                "data": data,
+            }
+            for data, names in reversed(sorted(grouped_tires.items()))
+        ]
+
+        for dataset in series:
+            self.draw_chart(
+                {
+                    "type": "radar",
+                    "data": {
+                        "labels": ["Mud", "Dirt", "Asphalt"],
+                        "datasets": [dataset],
+                    },
+                    "options": {
+                        "scales": {
+                            "r": {
+                                "min": 0,
+                                "max": math.ceil(maximum),
+                            },
+                        },
+                    },
+                }
+            )
+        self.write_noescape("</div>\n")
+
+    def trucks(self, trucks: Dict[str, List[Truck]]) -> None:
+        self.write_noescape("<h1>")
+        self.write("Trucks")
+        self.write_noescape("</h1>\n")
 
         for display_name, _, truck in sorted(
-            (data["strings"][t.UiName], i, t)
-            for i, t in enumerate(
-                itertools.chain.from_iterable(data["trucks"].values())
-            )
+            (self.strings[t.UiName], i, t)
+            for i, t in enumerate(itertools.chain.from_iterable(trucks.values()))
         ):
-            fp.write("<h2>")
-            fp.write(xml_escape(display_name))
-            fp.write("</h2>\n")
-            fp.write('<details open="">\n')
-            fp.write("<details>\n")
-            fp.write("<pre>")
-            fp.write(xml_escape(pprint.pformat(truck)))
-            fp.write("</pre>\n")
-            fp.write("</details>\n")
-            fp.write(
-                draw_tire_chart(
-                    itertools.chain.from_iterable(
-                        w.Tires for w in truck.CompatibleWheels
-                    ),
-                    data["strings"],
-                )
+            self.write_noescape("<h2>")
+            self.write(display_name)
+            self.write_noescape("</h2>\n")
+            self.write_noescape('<details open="">\n')
+            self.write_noescape("<details><pre>")
+            self.write(pprint.pformat(truck))
+            self.write_noescape("</pre></details>\n")
+            self.write_noescape('<h3>Tires</h3>\n<div class="tire-charts">\n')
+            self.draw_tire_charts(
+                itertools.chain.from_iterable(w.Tires for w in truck.CompatibleWheels),
             )
-            fp.write(
-                draw_engine_chart(
-                    itertools.chain.from_iterable(
-                        es.Engines for es in truck.EngineSocket
-                    ),
-                    data["strings"],
-                )
+            self.write_noescape("<h3>Engines</h3>\n")
+            self.draw_engine_chart(
+                itertools.chain.from_iterable(es.Engines for es in truck.EngineSocket),
             )
             fp.write("</details>\n")
+
+    def engines(
+        self,
+        engines: Dict[str, Dict[str, Engine]],
+        trucks: Dict[str, List[Truck]],
+    ) -> None:
+        all_engines = []  # type: List[Tuple[str, str, Engine]]
+        for stem, e in itertools.chain.from_iterable(
+            zip(
+                itertools.repeat(stem),
+                es.values(),
+            )
+            for stem, es in engines.items()
+        ):
+            all_engines.append((self.strings[e.UiName], stem, e))
+
+        truck_engines = {}  # type: Dict[str, List[Truck]]
+        for truck in itertools.chain.from_iterable(trucks.values()):
+            for socket in truck.EngineSocket:
+                for stem in socket.Type:
+                    truck_engines.setdefault(stem, []).append(truck)
+
+        all_engines = sorted(all_engines, key=lambda e: -e[2].Torque)
+        self.write_noescape("<h1>Engines</h1>\n")
+        self.draw_engine_chart(e for _, _, e in all_engines)
+
+        for display_name, stem, engine in all_engines:
+            self.write_noescape("<h2>")
+            self.write(display_name)
+            self.write_noescape("</h2>\n")
+            self.write_noescape("<p>")
+            self.write("Torque: %s" % engine.Torque)
+            self.write_noescape("</p>\n")
+            engine_trucks = truck_engines.get(stem, [])
+            if trucks:
+                self.write_noescape("<ul>\n")
+                for truck in engine_trucks:
+                    self.write_noescape("<li>")
+                    self.write(self.strings.get(truck.UiName, truck.UiName))
+                    self.write_noescape("</li>\n")
+                self.write_noescape("</ul>\n")
+            self.write_noescape("<details><pre>")
+            self.write(pprint.pformat(engine))
+            self.write_noescape("</pre></details>")
+
+
+if __name__ == "__main__":
+    import sys
+
+    logging.basicConfig(
+        stream=sys.stderr,
+        level=logging.WARNING,
+        format="%(name)s %(levelname)-8s :%(lineno)-3d %(message)s",
+    )
+    # there are lots of "multiple different definitions"
+    StringData.logger.setLevel(logging.ERROR + 1)
+
+    data = TruckData.load(
+        "/data/sata/steam/SteamLibrary/steamapps/common/SnowRunner/preload/paks/client/initial.pak"
+    )
+    with open(sys.stdout.fileno(), "w", encoding="ascii", closefd=False) as fp:
+        out = XMLOutput(fp, data.strings)
+        out.engines(data.engines, data.trucks)
+        out.write_noescape("<hr/>\n")
+        out.trucks(data.trucks)
