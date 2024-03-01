@@ -1052,17 +1052,18 @@ class XMLOutput(object):
             self.write_noescape(' class="')
             self.write(klass)
             self.write_noescape('"')
-        self.write_noescape('><canvas id="')
+        self.write_noescape(' style="position: relative;"><canvas id="')
         self.write(id)
         self.write_noescape('"></canvas><script>\n')
         # for whatever reason HTML does not like it when we escape our script
         self.write_noescape('"use strict";\n')
         if dom_content_loaded:
             self.write_noescape(
-                'document.addEventListener("DOMContentLoaded", async () => {\n'
+                'document.addEventListener("DOMContentLoaded", async () => {\n    '
             )
+        options.setdefault("options", {}).setdefault("animation", False)
         self.write_noescape(
-            "    new Chart(document.getElementById(%s), %s);\n"
+            "new Chart(document.getElementById(%s), %s);\n"
             % (
                 json.dumps(id),
                 json.dumps(options, default=self.json_decimal_default),
@@ -1093,7 +1094,6 @@ class XMLOutput(object):
                     ],
                 },
                 "options": {
-                    "animation": False,
                     "maintainAspectRatio": False,
                     "scales": {
                         "x": {
@@ -1155,7 +1155,6 @@ class XMLOutput(object):
                     "datasets": datasets,
                 },
                 "options": {
-                    "animation": False,
                     "maintainAspectRatio": False,
                     "scales": {
                         "x": {
@@ -1206,7 +1205,6 @@ class XMLOutput(object):
                         "datasets": [dataset],
                     },
                     "options": {
-                        "animation": False,
                         "scales": {
                             "r": {
                                 "min": 0,
