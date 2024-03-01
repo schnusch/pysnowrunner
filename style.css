@@ -1,0 +1,20 @@
+.truck {
+  display: flex;
+  align-items: flex-start;
+  gap: .5em;
+}
+.truck > .info {
+  flex: 1;
+}
+.tire-charts {
+  display: flex;
+  overflow-x: scroll;
+}
+.engine-chart, .tire-charts {
+  min-height: 12em;
+  max-height: 25vh;
+}
+details {
+  border-left: .5em solid lightgray;
+  padding-left: .5em;
+}

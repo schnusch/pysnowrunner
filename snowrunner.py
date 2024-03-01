@@ -1014,29 +1014,8 @@ class XMLOutput(object):
         self.stream = stream
         self.strings = strings
         self.write_noescape(
-            """<script src="https://cdn.jsdelivr.net/npm/chart.js" defer=""></script>
-<style>
-    .truck {
-        display: flex;
-        align-items: flex-start;
-        gap: .5em;
-    }
-    .truck > .info {
-        flex: 1;
-    }
-    .tire-charts {
-        display: flex;
-        overflow-x: scroll;
-    }
-    .engine-chart, .tire-charts {
-        min-height: 12em;
-        max-height: 25vh;
-    }
-    details {
-        border-left: .5em solid lightgray;
-        padding-left: .5em;
-    }
-</style>
+            """<script src="chart.js" defer=""></script>
+<link rel="stylesheet" href="style.css" />
 """
         )
 
@@ -1115,6 +1094,7 @@ class XMLOutput(object):
                 },
                 "options": {
                     "animation": False,
+                    "maintainAspectRatio": False,
                     "scales": {
                         "x": {
                             "ticks": {
@@ -1176,6 +1156,7 @@ class XMLOutput(object):
                 },
                 "options": {
                     "animation": False,
+                    "maintainAspectRatio": False,
                     "scales": {
                         "x": {
                             "ticks": {
@@ -1337,11 +1318,10 @@ if __name__ == "__main__":
     # there are lots of "multiple different definitions"
     StringData.logger.setLevel(logging.ERROR + 1)
 
-    data = TruckData.load(
-        "/data/sata/steam/SteamLibrary/steamapps/common/SnowRunner/preload/paks/client/initial.pak"
-    )
-    with open(sys.stdout.fileno(), "w", encoding="ascii", closefd=False) as fp:
+    data = TruckData.load("initial.pak")
+    with open("engines.html", "w", encoding="ascii") as fp:
         out = XMLOutput(fp, data.strings)
         out.engines(data.engines, data.trucks)
-        out.write_noescape("<hr/>\n")
+    with open("trucks.html", "w", encoding="ascii") as fp:
+        out = XMLOutput(fp, data.strings)
         out.trucks(data.trucks)
