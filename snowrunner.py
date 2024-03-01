@@ -24,6 +24,7 @@ from typing import (
     IO,
     Iterator,
     List,
+    NamedTuple,
     Optional,
     Tuple,
     Type,
@@ -396,12 +397,18 @@ class WheelTemplate(DecimalAttributes):
         return self
 
 
+class PosTuple(NamedTuple):
+    x: Decimal
+    y: Decimal
+    z: Decimal
+
+
 T_Wheel = TypeVar("T_Wheel", bound="Wheel")
 
 
 @dataclass
 class Wheel(WheelTemplate):
-    Pos: str
+    Pos: PosTuple
     RightSide: bool = dataclasses.field(default=False, kw_only=True)
 
     @classmethod
@@ -414,7 +421,10 @@ class Wheel(WheelTemplate):
 
         pos = elem.get("Pos")
         if pos is not None:
-            self = dataclasses.replace(self, Pos=pos)
+            assert pos.startswith("(") and pos.endswith(")")
+            parsed = tuple(Decimal(x) for x in pos[1:-1].split(";"))
+            assert len(parsed) == 3
+            self = dataclasses.replace(self, Pos=PosTuple(*parsed))
 
         right_side = elem.get("RightSide")
         if right_side is not None and right_side != "false":
@@ -426,6 +436,13 @@ class Wheel(WheelTemplate):
             and self.RightSide is not None
         ), "%r has None attributes: %s" % (self, ET.tostring(elem, encoding="unicode"))
         return self
+
+
+@dataclass
+class TWheelBase:
+    left: Decimal
+    all: Decimal
+    right: Decimal
 
 
 T_Truck = TypeVar("T_Truck", bound="Truck")
@@ -441,6 +458,73 @@ class Truck(Base):
     EngineSocket: List[EngineSocket]
     Wheels: List[Wheel]
     ExtraWheels: List[Wheel]
+    WheelBase: TWheelBase
+    TrackWidths: List[Tuple[Decimal, Wheel, Wheel]]
+
+    @staticmethod
+    def iter_wheelset_pairs(wheels: List[Wheel]) -> Iterator[Tuple[Wheel, Wheel]]:
+        """Find the closest non-right wheel to every nonright wheel or
+        vice versa and yield a tuple of them."""
+        left_wheels = [w for w in wheels if not w.RightSide]
+        right_wheels = [w for w in wheels if w.RightSide]
+        if len(left_wheels) < len(right_wheels):
+            main = left_wheels
+            other = right_wheels
+        else:
+            main = right_wheels
+            other = left_wheels
+        """
+        logger.error(
+            "iter_wheelset_pairs:\n%s\n%s",
+            pprint.pformat(left_wheels),
+            pprint.pformat([w for w in wheels if w.RightSide]),
+        )
+        """
+        for main_wheel in main:
+            closest_other_wheel = -1
+            for i, other_wheel in enumerate(other):
+                if (
+                    closest_other_wheel < 0
+                    or (
+                        abs(other_wheel.Pos.x - main_wheel.Pos.x)
+                        < abs(other[closest_other_wheel].Pos.x - main_wheel.Pos.x)
+                    )
+                ):
+                    closest_other_wheel = i
+            assert closest_other_wheel >= 0
+            left_wheel = main_wheel
+            right_wheel = other.pop(closest_other_wheel)
+            if left_wheel.RightSide:
+                left_wheel, right_wheel = right_wheel, left_wheel
+            assert not left_wheel.RightSide and right_wheel.RightSide
+            yield (left_wheel, right_wheel)
+
+    def iter_wheel_pairs(self) -> Iterator[Tuple[Wheel, Wheel]]:
+        for wheels in (self.Wheels, self.ExtraWheels):
+            yield from self.iter_wheelset_pairs(wheels)
+
+    def get_wheel_base(self) -> TWheelBase:
+        ax = [w.Pos.x for w in itertools.chain(self.Wheels, self.ExtraWheels)]
+        lx = []
+        rx = []
+        for l, r in self.iter_wheel_pairs():
+            lx.append(l.Pos.x)
+            rx.append(r.Pos.x)
+        return TWheelBase(
+            left=max(lx) - min(lx) if lx else Decimal(0),
+            all=max(ax) - min(ax) if ax else Decimal(0),
+            right=max(rx) - min(rx) if rx else Decimal(0),
+        )
+
+    def get_track_widths(self) -> List[Tuple[Decimal, Wheel, Wheel]]:
+        return [
+            # both y positions seem to be positive and are negated by RightSide attribute
+            (lw.Pos.y + rw.Pos.y, lw, rw)
+            for lw, rw in sorted(
+                self.iter_wheel_pairs(),
+                key=lambda ws: -ws[0].Pos.x,
+            )
+        ]
 
     @classmethod
     def from_xml(  # type: ignore[override]
@@ -472,6 +556,10 @@ class Truck(Base):
             ],
         )
 
+        self = dataclasses.replace(self, WheelBase=self.get_wheel_base())
+
+        self = dataclasses.replace(self, TrackWidths=self.get_track_widths())
+
         gamedata = elem.find("./GameData")
         if gamedata is not None:
             uidesc = gamedata.find("./UiDesc")
@@ -490,7 +578,7 @@ class Truck(Base):
                 self = dataclasses.replace(self, Price=int(price, 10))
 
         assert (
-            self.UiName is not None and self.CompatibleWheels is not None
+            self.UiName is not None
         ), "%r has None attributes: %s" % (self, ET.tostring(elem, encoding="unicode"))
         return self
 
@@ -808,7 +896,7 @@ class TemplateData(EngineData):
 @dataclass
 class TireData(TemplateData):
     """*tires* is indexed by the basename of the file they were read from
-    (without file extension) first, and by the tires *Name* second.
+    (without file extension) first, and by the tire's *Name* second.
     """
 
     tires: Dict[str, Dict[str, TruckTire]]
