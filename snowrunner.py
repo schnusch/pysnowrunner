@@ -946,6 +946,68 @@ class XMLOutput(object):
             klass="engine-chart",
         )
 
+    def draw_tire_bar_chart(self, tires: Iterable[TruckTire]) -> None:
+        minimum = 0
+        maximum = Decimal(3)  # type: Union[int, Decimal]
+        grouped_tires = {}  # type: Dict[Tuple[Decimal, Decimal, Decimal], Dict[bool, Set[str]]]
+        for t in tires:
+            k = (
+                t.WheelFriction.BodyFrictionAsphalt,
+                t.WheelFriction.BodyFriction,
+                t.WheelFriction.SubstanceFriction,
+            )
+            grouped_tires.setdefault(
+                k, {}
+            ).setdefault(
+                t.WheelFriction.IsIgnoreIce, set()
+            ).add(
+                self.strings.get(t.UiName, t.UiName)
+            )
+            maximum = max(maximum, *k)
+            if t.WheelFriction.IsIgnoreIce:
+                minimum = -1
+        maximum = math.ceil(maximum)
+        minimum *= maximum
+
+        labels = []
+        datasets = (
+            ChartJsDataset(data=[], label="Asphalt"),
+            ChartJsDataset(data=[], label="Dirt"),
+            ChartJsDataset(data=[], label="Mud"),
+        )
+        for values, names in sorted(grouped_tires.items(), key=lambda x: -x[0][2]):
+            for chains in (True, False):
+                if chains in names:
+                    for i, v in enumerate(values):
+                        datasets[i]["data"].append(v * (-1 if chains else 1))
+                    labels.append(", ".join(sorted(names[chains])))
+
+        self.draw_chart(
+            {
+                "type": "bar",
+                "data": {
+                    "labels": labels,
+                    "datasets": datasets,
+                },
+                "options": {
+                    "animation": False,
+                    "scales": {
+                        "x": {
+                            "ticks": {
+                                "autoSkip": False,
+                                "maxRotation": 60,
+                            },
+                        },
+                        "y": {
+                            "min": minimum,
+                            "max": maximum,
+                        },
+                    },
+                },
+            },
+            klass="engine-chart",
+        )
+
     def draw_tire_charts(self, tires: Iterable[TruckTire]) -> None:
         maximum = Decimal(3)
         grouped_tires = {}  # type: Dict[Tuple[Decimal, Decimal, Decimal, bool], Set[str]]
@@ -1022,7 +1084,7 @@ class XMLOutput(object):
             self.write_noescape("</pre>\n")
             self.write_noescape("      </details>\n")
             self.write_noescape("      <h3>Tires</h3>\n")
-            self.draw_tire_charts(
+            self.draw_tire_bar_chart(
                 itertools.chain.from_iterable(w.Tires for w in truck.CompatibleWheels),
             )
             self.write_noescape("      <h3>Engines</h3>\n")
