@@ -109,6 +109,9 @@ class DecimalAttributes(Base):
         return self
 
 
+T_WheelFriction = TypeVar("T_WheelFriction", bound="WheelFriction")
+
+
 @dataclass
 class WheelFriction(DecimalAttributes):
     tag = "WheelFriction"
@@ -117,6 +120,20 @@ class WheelFriction(DecimalAttributes):
     BodyFrictionAsphalt: Decimal
     BodyFriction: Decimal
     SubstanceFriction: Decimal
+    IsIgnoreIce: bool = dataclasses.field(default=False, kw_only=True)
+
+    @classmethod
+    def from_xml(
+        cls: Type[T_WheelFriction],
+        elem: ET.Element,
+        templates: "TemplateDict",
+    ) -> T_WheelFriction:
+        self = super().from_xml(elem, templates)
+        ignore_ice = elem.get("IsIgnoreIce")
+        if ignore_ice is not None and ignore_ice != "false":
+            assert ignore_ice == "true"
+            self = dataclasses.replace(self, IsIgnoreIce=True)
+        return self
 
 
 @dataclass
@@ -802,6 +819,11 @@ class TruckData(TireData):
         return cls(trucks=all_trucks, **base.asdict_non_recursive())
 
 
+class ChartJsDataset(TypedDict):
+    label: str
+    data: List[Decimal]
+
+
 class XMLOutput(object):
     def __init__(self, stream: IO[str], strings: Dict[str, str]):
         self.stream = stream
@@ -900,10 +922,10 @@ class XMLOutput(object):
                 "data": {
                     "labels": labels,
                     "datasets": [
-                        {
-                            "label": "Torque",
-                            "data": torques,
-                        },
+                        ChartJsDataset(
+                            label="Torque",
+                            data=torques,
+                        ),
                     ],
                 },
                 "options": {
@@ -926,23 +948,24 @@ class XMLOutput(object):
 
     def draw_tire_charts(self, tires: Iterable[TruckTire]) -> None:
         maximum = Decimal(3)
-        grouped_tires = {}  # type: Dict[Tuple[Decimal, Decimal, Decimal], Set[str]]
+        grouped_tires = {}  # type: Dict[Tuple[Decimal, Decimal, Decimal, bool], Set[str]]
         for t in tires:
             k = (
                 t.WheelFriction.SubstanceFriction,
                 t.WheelFriction.BodyFriction,
                 t.WheelFriction.BodyFrictionAsphalt,
+                t.WheelFriction.IsIgnoreIce,
             )
             grouped_tires.setdefault(k, set()).add(self.strings.get(t.UiName, t.UiName))
-            maximum = max(maximum, *k)
+            maximum = max(maximum, *k[:3])
         if not grouped_tires:
             return
 
         series = [
-            {
-                "label": ", ".join(sorted(names)),
-                "data": data,
-            }
+            ChartJsDataset(
+                label=", ".join(sorted(names)),
+                data=list(data[:3]),
+            )
             for data, names in reversed(sorted(grouped_tires.items()))
         ]
 
