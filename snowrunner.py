@@ -358,6 +358,76 @@ class EngineSocket(Base):
         return self
 
 
+T_WheelTemplate = TypeVar("T_WheelTemplate", bound="WheelTemplate")
+
+
+@dataclass
+class WheelTemplate(DecimalAttributes):
+    tag = "Wheel"
+    decimal_attributes = ("SteeringAngle", "SteeringCastor")
+
+    Location: Optional[str]
+    Torque: str
+    ConnectedToHandbrake: bool = dataclasses.field(default=False, kw_only=True)
+    SteeringAngle: Decimal = dataclasses.field(default=Decimal(0), kw_only=True)
+    SteeringCastor: Decimal = dataclasses.field(default=Decimal(0), kw_only=True)
+
+    @classmethod
+    def from_xml(
+        cls: Type[T_WheelTemplate],
+        elem: ET.Element,
+        templates: "TemplateDict",
+    ) -> T_WheelTemplate:
+        self = super().from_xml(elem, templates)
+
+        handbrake = elem.get("ConnectedToHandbrake")
+        if handbrake is not None and handbrake != "false":
+            assert handbrake == "true"
+            self = dataclasses.replace(self, ConnectedToHandbrake=True)
+
+        location = elem.get("Location")
+        if location is not None:
+            self = dataclasses.replace(self, Location=location)
+
+        torque = elem.get("Torque")
+        if torque is not None:
+            self = dataclasses.replace(self, Torque=torque)
+
+        return self
+
+
+T_Wheel = TypeVar("T_Wheel", bound="Wheel")
+
+
+@dataclass
+class Wheel(WheelTemplate):
+    Pos: str
+    RightSide: bool = dataclasses.field(default=False, kw_only=True)
+
+    @classmethod
+    def from_xml(
+        cls: Type[T_Wheel],
+        elem: ET.Element,
+        templates: "TemplateDict",
+    ) -> T_Wheel:
+        self = super().from_xml(elem, templates)
+
+        pos = elem.get("Pos")
+        if pos is not None:
+            self = dataclasses.replace(self, Pos=pos)
+
+        right_side = elem.get("RightSide")
+        if right_side is not None and right_side != "false":
+            assert right_side == "true"
+            self = dataclasses.replace(self, RightSide=True)
+
+        assert (
+            self.Pos is not None
+            and self.RightSide is not None
+        ), "%r has None attributes: %s" % (self, ET.tostring(elem, encoding="unicode"))
+        return self
+
+
 T_Truck = TypeVar("T_Truck", bound="Truck")
 
 
@@ -369,6 +439,8 @@ class Truck(Base):
     Price: int
     CompatibleWheels: List[CompatibleWheels]
     EngineSocket: List[EngineSocket]
+    Wheels: List[Wheel]
+    ExtraWheels: List[Wheel]
 
     @classmethod
     def from_xml(  # type: ignore[override]
@@ -389,6 +461,14 @@ class Truck(Base):
             EngineSocket=[
                 EngineSocket.from_xml(e, templates, engines)
                 for e in elem.iterfind("./TruckData/EngineSocket")
+            ],
+            Wheels=[
+                Wheel.from_xml(w, templates)
+                for w in elem.iterfind("./TruckData/Wheels/Wheel")
+            ],
+            ExtraWheels=[
+                Wheel.from_xml(w, templates)
+                for w in elem.iterfind("./TruckData/ExtraWheels/Wheel")
             ],
         )
 
@@ -455,6 +535,7 @@ template_factories = [
     TruckTireTemplate,
     WheelFriction,
     WheelSoftness,
+    WheelTemplate,
 ]  # type: List[Any]
 
 
@@ -467,17 +548,29 @@ def load_templates(
     templates = (
         {} if templates is None else dict((k, v.copy()) for k, v in templates.items())
     )
+    # templates might not be in order and may derive from a later one
+    backlog = []  # type: List[Tuple[Any, ET.Element]]
     for root in roots:
         if root.tag == "_templates":
             assert assert_include is None or root.get("Include") == assert_include
             for cls in template_factories:
                 for elem in root.iterfind(f"./{cls.tag}/*"):
-                    assert elem.tag not in templates.get(
-                        cls, {}
-                    ), "duplicate template %s/%s" % (cls.tag, elem.tag)
-                    templates.setdefault(cls, {})[elem.tag] = cls.from_xml(
-                        elem, templates
-                    )
+                    backlog.append((cls, elem))
+    while backlog:
+        i = 0
+        while i < len(backlog):
+            cls, elem = backlog[i]
+            assert elem.tag not in templates.get(
+                cls, {}
+            ), "duplicate template %s/%s" % (cls.tag, elem.tag)
+            try:
+                templates.setdefault(cls, {})[elem.tag] = cls.from_xml(
+                    elem, templates
+                )
+            except KeyError:
+                i += 1
+            else:
+                backlog.pop(i)
     return templates
 
 
@@ -807,6 +900,10 @@ class TruckData(TireData):
             ),
             {},
         ):
+            file_templates[Wheel] = dict(
+                (k, dataclasses.replace(Wheel.none(), **v.asdict_non_recursive()))
+                for k, v in file_templates.get(WheelTemplate, {}).items()
+            )
             file_trucks = cls.load_trucks(
                 roots,
                 file_templates,
