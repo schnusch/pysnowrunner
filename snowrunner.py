@@ -751,7 +751,7 @@ class TireData(TemplateData):
 
 @dataclass
 class TruckData(TireData):
-    trucks: Dict[str, List[Truck]]
+    trucks: Dict[str, Dict[str, Truck]]
 
     @staticmethod
     def load_trucks(
@@ -781,8 +781,8 @@ class TruckData(TireData):
     ) -> "TruckData":
         base = super()._load(pak_path, pak)
 
-        all_trucks = {}  # type: Dict[str, List[Truck]]
-        for _, roots, file_templates in iter_load_dir_templates(
+        all_trucks = {}  # type: Dict[str, Dict[str, Truck]]
+        for path, roots, file_templates in iter_load_dir_templates(
             pak,
             create_dlc_filter(
                 PureWindowsPath("[media]"),
@@ -796,8 +796,8 @@ class TruckData(TireData):
                 engines=base.engines,
                 tires=base.tires,
             )
-            for k, v in file_trucks.items():
-                all_trucks.setdefault(k, []).append(v)
+            assert path.stem not in all_trucks
+            all_trucks[path.stem] = file_trucks
 
         return cls(trucks=all_trucks, **base.asdict_non_recursive())
 
@@ -809,13 +809,21 @@ class XMLOutput(object):
         self.write_noescape(
             """<script src="https://cdn.jsdelivr.net/npm/chart.js" defer=""></script>
 <style>
-    .engine-chart, .tire-charts {
-        min-height: 8em;
-        max-height: 25vh;
+    .truck {
+        display: flex;
+        align-items: flex-start;
+        gap: .5em;
+    }
+    .truck > .info {
+        flex: 1;
     }
     .tire-charts {
         display: flex;
         overflow-x: scroll;
+    }
+    .engine-chart, .tire-charts {
+        min-height: 12em;
+        max-height: 25vh;
     }
     details {
         border-left: .5em solid lightgray;
@@ -899,7 +907,14 @@ class XMLOutput(object):
                     ],
                 },
                 "options": {
+                    "animation": False,
                     "scales": {
+                        "x": {
+                            "ticks": {
+                                "autoSkip": False,
+                                "maxRotation": 60,
+                            },
+                        },
                         "y": {
                             "beginAtZero": True,
                         },
@@ -940,6 +955,7 @@ class XMLOutput(object):
                         "datasets": [dataset],
                     },
                     "options": {
+                        "animation": False,
                         "scales": {
                             "r": {
                                 "min": 0,
@@ -951,36 +967,53 @@ class XMLOutput(object):
             )
         self.write_noescape("</div>\n")
 
-    def trucks(self, trucks: Dict[str, List[Truck]]) -> None:
+    def trucks(self, trucks: Dict[str, Dict[str, Truck]]) -> None:
         self.write_noescape("<h1>")
         self.write("Trucks")
         self.write_noescape("</h1>\n")
 
-        for display_name, _, truck in sorted(
-            (self.strings[t.UiName], i, t)
-            for i, t in enumerate(itertools.chain.from_iterable(trucks.values()))
+        for display_name, stem, _, truck in sorted(
+            (self.strings[t.UiName], stem, i, t)
+            for i, (stem, t) in enumerate(
+                itertools.chain.from_iterable(
+                    zip(
+                        itertools.repeat(stem),
+                        ts.values(),
+                    )
+                    for stem, ts in trucks.items()
+                )
+            )
         ):
             self.write_noescape("<h2>")
             self.write(display_name)
             self.write_noescape("</h2>\n")
             self.write_noescape('<details open="">\n')
-            self.write_noescape("<details><pre>")
+            self.write_noescape('  <div class="truck">\n')
+            self.write_noescape('    <img src="')
+            self.write("https://raw.githubusercontent.com/VerZsuT/SnowRunner-XML-Editor-Desktop/main/src/images/trucks/%s.jpg" % stem)
+            self.write_noescape('">\n')
+            self.write_noescape('    <div class="info">\n')
+            self.write_noescape("      <details>\n")
+            self.write_noescape("        <pre>")
             self.write(pprint.pformat(truck))
-            self.write_noescape("</pre></details>\n")
-            self.write_noescape('<h3>Tires</h3>\n<div class="tire-charts">\n')
+            self.write_noescape("</pre>\n")
+            self.write_noescape("      </details>\n")
+            self.write_noescape("      <h3>Tires</h3>\n")
             self.draw_tire_charts(
                 itertools.chain.from_iterable(w.Tires for w in truck.CompatibleWheels),
             )
-            self.write_noescape("<h3>Engines</h3>\n")
+            self.write_noescape("      <h3>Engines</h3>\n")
             self.draw_engine_chart(
                 itertools.chain.from_iterable(es.Engines for es in truck.EngineSocket),
             )
-            fp.write("</details>\n")
+            self.write_noescape("    </div>\n")
+            self.write_noescape("  </div>\n")
+            self.write_noescape("</details>\n")
 
     def engines(
         self,
         engines: Dict[str, Dict[str, Engine]],
-        trucks: Dict[str, List[Truck]],
+        trucks: Dict[str, Dict[str, Truck]],
     ) -> None:
         all_engines = []  # type: List[Tuple[str, str, Engine]]
         for stem, e in itertools.chain.from_iterable(
@@ -993,10 +1026,11 @@ class XMLOutput(object):
             all_engines.append((self.strings[e.UiName], stem, e))
 
         truck_engines = {}  # type: Dict[str, List[Truck]]
-        for truck in itertools.chain.from_iterable(trucks.values()):
-            for socket in truck.EngineSocket:
-                for stem in socket.Type:
-                    truck_engines.setdefault(stem, []).append(truck)
+        for ts in trucks.values():
+            for truck in ts.values():
+                for socket in truck.EngineSocket:
+                    for type in socket.Type:
+                        truck_engines.setdefault(type, []).append(truck)
 
         all_engines = sorted(all_engines, key=lambda e: -e[2].Torque)
         self.write_noescape("<h1>Engines</h1>\n")
