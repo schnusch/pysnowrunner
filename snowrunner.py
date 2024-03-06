@@ -949,7 +949,7 @@ class TireData(TemplateData):
 
 @dataclass
 class TruckData(TireData):
-    trucks: Dict[str, Dict[str, Truck]]
+    trucks: Dict[str, Truck]
 
     @staticmethod
     def load_trucks(
@@ -957,19 +957,15 @@ class TruckData(TireData):
         templates: TemplateDict,
         engines: Dict[str, Dict[str, Engine]],
         tires: Dict[str, Dict[str, TruckTire]],
-    ) -> Dict[str, Truck]:
-        trucks = {}  # Dict[str, TruckTire]
+    ) -> Iterator[Truck]:
         for root in roots:
             if root.tag == Truck.tag:
-                t = Truck.from_xml(
+                yield Truck.from_xml(
                     root,
                     templates,
                     engines=engines,
                     tires=tires,
                 )
-                assert t.UiName not in trucks
-                trucks[t.UiName] = t
-        return trucks
 
     @classmethod
     def _load(
@@ -979,7 +975,7 @@ class TruckData(TireData):
     ) -> "TruckData":
         base = super()._load(pak_path, pak)
 
-        all_trucks = {}  # type: Dict[str, Dict[str, Truck]]
+        all_trucks = {}  # type: Dict[str, Truck]
         for path, roots, file_templates in iter_load_dir_templates(
             pak,
             create_dlc_filter(
@@ -992,317 +988,49 @@ class TruckData(TireData):
                 (k, dataclasses.replace(Wheel.none(), **v.asdict_non_recursive()))
                 for k, v in file_templates.get(WheelTemplate, {}).items()
             )
-            file_trucks = cls.load_trucks(
+            for truck in cls.load_trucks(
                 roots,
                 file_templates,
                 engines=base.engines,
                 tires=base.tires,
-            )
-            assert path.stem not in all_trucks
-            all_trucks[path.stem] = file_trucks
+            ):
+                if path.stem in all_trucks:
+                    logger.error(
+                        "multiple truck definitions in %s, ignored all but:\n%s",
+                        path,
+                        pprint.pformat(all_trucks[path.stem]),
+                    )
+                else:
+                    all_trucks[path.stem] = truck
 
         return cls(trucks=all_trucks, **base.asdict_non_recursive())
 
 
-class ChartJsDataset(TypedDict):
+def round_up(x: Decimal) -> Decimal:
+    if x == 0:
+        return x
+    e = int(math.log10(x))
+    d = 1
+    while d * 10**e < x:
+        d += 1
+    return Decimal(d * 10**e)
+
+
+def json_decimal_default(x):
+    if isinstance(x, Decimal):
+        return float(x)
+    else:
+        raise TypeError("cannot JSONify %r" % (x,))
+
+
+class _ChartJsDataset(TypedDict, total=False):
+    xAxisID: str
+    yAxisID: str
+
+
+class ChartJsDataset(_ChartJsDataset):
     label: str
     data: List[Decimal]
-
-
-class XMLOutput(object):
-    def __init__(self, stream: IO[str], strings: Dict[str, str]):
-        self.stream = stream
-        self.strings = strings
-        self.write_noescape(
-            """<script src="chart.js" defer=""></script>
-<link rel="stylesheet" href="style.css" />
-"""
-        )
-
-    @staticmethod
-    def escape(x: str) -> str:
-        def repl(m: re.Match) -> str:
-            return "&#%d;" % ord(m[0])
-
-        return re.sub(r"[^\n !#$%(-;=?-~]", repl, x)
-
-    @staticmethod
-    def json_decimal_default(x):
-        if isinstance(x, Decimal):
-            return float(x)
-        else:
-            raise TypeError
-
-    def write_noescape(self, x: str) -> None:
-        self.stream.write(x)
-
-    def write(self, x: str) -> None:
-        self.write_noescape(self.escape(x))
-
-    def draw_chart(
-        self,
-        options,
-        *,
-        dom_content_loaded: bool = True,
-        klass: Optional[str] = None,
-    ) -> None:
-        id = str(uuid.uuid4())
-        self.write_noescape("<div")
-        if klass is not None:
-            self.write_noescape(' class="')
-            self.write(klass)
-            self.write_noescape('"')
-        self.write_noescape(' style="position: relative;"><canvas id="')
-        self.write(id)
-        self.write_noescape('"></canvas><script>\n')
-        # for whatever reason HTML does not like it when we escape our script
-        self.write_noescape('"use strict";\n')
-        if dom_content_loaded:
-            self.write_noescape(
-                'document.addEventListener("DOMContentLoaded", async () => {\n    '
-            )
-        options.setdefault("options", {}).setdefault("animation", False)
-        self.write_noescape(
-            "new Chart(document.getElementById(%s), %s);\n"
-            % (
-                json.dumps(id),
-                json.dumps(options, default=self.json_decimal_default),
-            )
-        )
-        if dom_content_loaded:
-            self.write_noescape("});\n")
-        self.write_noescape("</script></div>\n")
-
-    def draw_engine_chart(self, engines: Iterable[Engine]) -> None:
-        labels = []
-        torques = []
-        for e in sorted(engines, key=lambda e: e.Torque):
-            labels.append(self.strings.get(e.UiName, e.UiName))
-            torques.append(e.Torque)
-        if not labels:
-            return
-        self.draw_chart(
-            {
-                "type": "bar",
-                "data": {
-                    "labels": labels,
-                    "datasets": [
-                        ChartJsDataset(
-                            label="Torque",
-                            data=torques,
-                        ),
-                    ],
-                },
-                "options": {
-                    "maintainAspectRatio": False,
-                    "scales": {
-                        "x": {
-                            "ticks": {
-                                "autoSkip": False,
-                                "maxRotation": 60,
-                            },
-                        },
-                        "y": {
-                            "beginAtZero": True,
-                        },
-                    },
-                },
-            },
-            klass="engine-chart",
-        )
-
-    def draw_tire_bar_chart(self, tires: Iterable[TruckTire]) -> None:
-        minimum = 0
-        maximum = Decimal(3)  # type: Union[int, Decimal]
-        grouped_tires = {}  # type: Dict[Tuple[Decimal, Decimal, Decimal], Dict[bool, Set[str]]]
-        for t in tires:
-            k = (
-                t.WheelFriction.BodyFrictionAsphalt,
-                t.WheelFriction.BodyFriction,
-                t.WheelFriction.SubstanceFriction,
-            )
-            grouped_tires.setdefault(
-                k, {}
-            ).setdefault(
-                t.WheelFriction.IsIgnoreIce, set()
-            ).add(
-                self.strings.get(t.UiName, t.UiName)
-            )
-            maximum = max(maximum, *k)
-            if t.WheelFriction.IsIgnoreIce:
-                minimum = -1
-        maximum = math.ceil(maximum)
-        minimum *= maximum
-
-        labels = []
-        datasets = (
-            ChartJsDataset(data=[], label="Asphalt"),
-            ChartJsDataset(data=[], label="Dirt"),
-            ChartJsDataset(data=[], label="Mud"),
-        )
-        for values, names in sorted(grouped_tires.items(), key=lambda x: -x[0][2]):
-            for chains in (True, False):
-                if chains in names:
-                    for i, v in enumerate(values):
-                        datasets[i]["data"].append(v * (-1 if chains else 1))
-                    labels.append(", ".join(sorted(names[chains])))
-
-        self.draw_chart(
-            {
-                "type": "bar",
-                "data": {
-                    "labels": labels,
-                    "datasets": datasets,
-                },
-                "options": {
-                    "maintainAspectRatio": False,
-                    "scales": {
-                        "x": {
-                            "ticks": {
-                                "autoSkip": False,
-                                "maxRotation": 60,
-                            },
-                        },
-                        "y": {
-                            "min": minimum,
-                            "max": maximum,
-                        },
-                    },
-                },
-            },
-            klass="engine-chart",
-        )
-
-    def draw_tire_charts(self, tires: Iterable[TruckTire]) -> None:
-        maximum = Decimal(3)
-        grouped_tires = {}  # type: Dict[Tuple[Decimal, Decimal, Decimal, bool], Set[str]]
-        for t in tires:
-            k = (
-                t.WheelFriction.SubstanceFriction,
-                t.WheelFriction.BodyFriction,
-                t.WheelFriction.BodyFrictionAsphalt,
-                t.WheelFriction.IsIgnoreIce,
-            )
-            grouped_tires.setdefault(k, set()).add(self.strings.get(t.UiName, t.UiName))
-            maximum = max(maximum, *k[:3])
-        if not grouped_tires:
-            return
-
-        series = [
-            ChartJsDataset(
-                label=", ".join(sorted(names)),
-                data=list(data[:3]),
-            )
-            for data, names in reversed(sorted(grouped_tires.items()))
-        ]
-
-        for dataset in series:
-            self.draw_chart(
-                {
-                    "type": "radar",
-                    "data": {
-                        "labels": ["Mud", "Dirt", "Asphalt"],
-                        "datasets": [dataset],
-                    },
-                    "options": {
-                        "scales": {
-                            "r": {
-                                "min": 0,
-                                "max": math.ceil(maximum),
-                            },
-                        },
-                    },
-                }
-            )
-        self.write_noescape("</div>\n")
-
-    def trucks(self, trucks: Dict[str, Dict[str, Truck]]) -> None:
-        self.write_noescape("<h1>")
-        self.write("Trucks")
-        self.write_noescape("</h1>\n")
-
-        for display_name, stem, _, truck in sorted(
-            (self.strings[t.UiName], stem, i, t)
-            for i, (stem, t) in enumerate(
-                itertools.chain.from_iterable(
-                    zip(
-                        itertools.repeat(stem),
-                        ts.values(),
-                    )
-                    for stem, ts in trucks.items()
-                )
-            )
-        ):
-            self.write_noescape("<h2>")
-            self.write(display_name)
-            self.write_noescape("</h2>\n")
-            self.write_noescape('<details open="">\n')
-            self.write_noescape('  <div class="truck">\n')
-            self.write_noescape('    <img src="')
-            self.write("https://raw.githubusercontent.com/VerZsuT/SnowRunner-XML-Editor-Desktop/main/src/images/trucks/%s.jpg" % stem)
-            self.write_noescape('">\n')
-            self.write_noescape('    <div class="info">\n')
-            self.write_noescape("      <details>\n")
-            self.write_noescape("        <pre>")
-            self.write(pprint.pformat(truck))
-            self.write_noescape("</pre>\n")
-            self.write_noescape("      </details>\n")
-            self.write_noescape("      <h3>Tires</h3>\n")
-            self.draw_tire_bar_chart(
-                itertools.chain.from_iterable(w.Tires for w in truck.CompatibleWheels),
-            )
-            self.write_noescape("      <h3>Engines</h3>\n")
-            self.draw_engine_chart(
-                itertools.chain.from_iterable(es.Engines for es in truck.EngineSocket),
-            )
-            self.write_noescape("    </div>\n")
-            self.write_noescape("  </div>\n")
-            self.write_noescape("</details>\n")
-
-    def engines(
-        self,
-        engines: Dict[str, Dict[str, Engine]],
-        trucks: Dict[str, Dict[str, Truck]],
-    ) -> None:
-        all_engines = []  # type: List[Tuple[str, str, Engine]]
-        for stem, e in itertools.chain.from_iterable(
-            zip(
-                itertools.repeat(stem),
-                es.values(),
-            )
-            for stem, es in engines.items()
-        ):
-            all_engines.append((self.strings[e.UiName], stem, e))
-
-        truck_engines = {}  # type: Dict[str, List[Truck]]
-        for ts in trucks.values():
-            for truck in ts.values():
-                for socket in truck.EngineSocket:
-                    for type in socket.Type:
-                        truck_engines.setdefault(type, []).append(truck)
-
-        all_engines = sorted(all_engines, key=lambda e: -e[2].Torque)
-        self.write_noescape("<h1>Engines</h1>\n")
-        self.draw_engine_chart(e for _, _, e in all_engines)
-
-        for display_name, stem, engine in all_engines:
-            self.write_noescape("<h2>")
-            self.write(display_name)
-            self.write_noescape("</h2>\n")
-            self.write_noescape("<p>")
-            self.write("Torque: %s" % engine.Torque)
-            self.write_noescape("</p>\n")
-            engine_trucks = truck_engines.get(stem, [])
-            if trucks:
-                self.write_noescape("<ul>\n")
-                for truck in engine_trucks:
-                    self.write_noescape("<li>")
-                    self.write(self.strings.get(truck.UiName, truck.UiName))
-                    self.write_noescape("</li>\n")
-                self.write_noescape("</ul>\n")
-            self.write_noescape("<details><pre>")
-            self.write(pprint.pformat(engine))
-            self.write_noescape("</pre></details>")
 
 
 if __name__ == "__main__":
@@ -1317,9 +1045,4 @@ if __name__ == "__main__":
     StringData.logger.setLevel(logging.ERROR + 1)
 
     data = TruckData.load("initial.pak")
-    with open("engines.html", "w", encoding="ascii") as fp:
-        out = XMLOutput(fp, data.strings)
-        out.engines(data.engines, data.trucks)
-    with open("trucks.html", "w", encoding="ascii") as fp:
-        out = XMLOutput(fp, data.strings)
-        out.trucks(data.trucks)
+    pprint.pprint(data)

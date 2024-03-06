@@ -1,0 +1,10 @@
+{% assign n = include.trucks | size -%}
+{% if n > 0 -%}
+<h3>Trucks</h3>
+<ul>
+  {% assign trucks = include.trucks | sort_natural: "display_name" -%}
+  {% for truck in trucks -%}
+  <li><a href="{{ "/trucks/" | relative_url }}#{{ truck.slug }}">{{ truck.display_name }}</a></li>
+  {% endfor -%}
+</ul>
+{% endif -%}

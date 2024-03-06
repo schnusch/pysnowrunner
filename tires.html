@@ -1,0 +1,48 @@
+---
+layout: page
+title: Tires
+permalink: /tires/
+append_head: |-
+  <script src="https://unpkg.com/chart.js@4.4.2" integrity="sha256-x+LL+wNI+ZAd7MSX8xbB/qhCAgm2EEEv+4j9PVFvnTA=" crossorigin="anonymous" defer=""></script>
+  <script>
+    const charts = [];
+    document.addEventListener("DOMContentLoaded", () => {
+      new Chart(document.getElementById("chart-tires"), {{ site.data.tires.chartjs | jsonify }});
+    });
+  </script>
+---
+
+{% capture height %}{{ site.data.tires.chartjs.data.labels | size }}{% endcapture -%}
+<p>{% include chart.html id="chart-tires" height=height %}</p>
+
+{% assign tires = site.data.tires.tires | sort_natural: "display_name" -%}
+{% for tire in tires -%}
+<details id="{{ tire.display_name | slugify }}" class="h2 tires" open="">
+  <summary><div><h2>{{ tire.display_name }}</h2></div></summary>
+  {% for variant in tire.variants -%}
+  <h3 id="{{ tire.display_name | slugify }}-{{ variant.slug }}">{{ variant.slug }}</h3>
+  <table style="width: fit-content;">
+    <tbody>
+      <tr>
+        <th>Asphalt</th>
+        <td class="right">{{ variant.asphalt }}</td>
+      </tr>
+      <tr>
+        <th>Dirt</th>
+        <td class="right">{{ variant.dirt }}</td>
+      </tr>
+      <tr>
+        <th>Mud</th>
+        <td class="right">{{ variant.mud }}</td>
+      </tr>
+    </tbod>
+  </table>
+  {% include truck-list.html trucks=variant.trucks -%}
+  <h4>Raw Data</h4>
+  <details class="h5">
+    <summary><div><h5>Python</h5></div></summary>
+    <pre>{{ variant.python }}</pre>
+  </details>
+  {% endfor -%}
+</details>
+{% endfor -%}

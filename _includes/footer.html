@@ -1,0 +1,16 @@
+<footer class="site-footer h-card">
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p>{{ site.description | escape }}</p>
+      </div>
+      <div class="footer-col">
+        <p>
+          generated: <time datetime="{{ site.time | date_to_xmlschema }}">{{ site.time | date: "%Y-%m-%d %H:%M:%S %z" }}</time><br/>
+          extracted: <time datetime="{{ site.data.version.date | date_to_xmlschema }}">{{ site.data.version.date | date: "%Y-%m-%d %H:%M:%S %z" }}</time><br/>
+          <code>{{ site.data.version.hash }}  initial.pak</code>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
