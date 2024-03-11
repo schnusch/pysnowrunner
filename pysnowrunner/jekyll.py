@@ -47,7 +47,7 @@ def round_up(x: Decimal) -> Decimal:
     return Decimal(d * 10**e)
 
 
-def json_decimal_default(x):
+def json_decimal_default(x: Decimal) -> float:
     if isinstance(x, Decimal):
         return float(x)
     else:
@@ -70,7 +70,7 @@ class JekyllOutput(object):
         self.strings = strings
 
     @staticmethod
-    def write_json(path: str, x) -> None:
+    def write_json(path: str, x: Any) -> None:
         with open(path, "w", encoding="utf-8") as fp:
             json.dump(
                 x,

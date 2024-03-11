@@ -24,6 +24,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from decimal import Decimal
 from typing import (
+    Any,
     ClassVar,
     Dict,
     Iterator,
@@ -32,18 +33,16 @@ from typing import (
     Optional,
     Tuple,
     Type,
-    TypedDict,
     TypeVar,
-    cast,
 )
 
 logger = logging.getLogger(__name__)
-T_Base = TypeVar("T_Base", bound="Base")
+T_Base = TypeVar("T_Base", bound="_Base")
 
 TemplateDict = Dict[Type[T_Base], Dict[str, T_Base]]
 
 
-class Base(object):
+class _Base(object):
     tag: ClassVar[str]
 
     @classmethod
@@ -73,14 +72,11 @@ class Base(object):
                 )
         return base
 
-    def asdict_non_recursive(self):
-        T = TypedDict(
-            type(self).__name__,
-            dict((f.name, f.type) for f in dataclasses.fields(self)),
-        )
-        return cast(
-            T, dict((f.name, getattr(self, f.name)) for f in dataclasses.fields(self))
-        )
+
+@dataclass
+class Base(_Base):
+    def asdict_non_recursive(self) -> Dict[str, Any]:
+        return dict((f.name, getattr(self, f.name)) for f in dataclasses.fields(self))
 
 
 T_DecimalAttributes = TypeVar("T_DecimalAttributes", bound="DecimalAttributes")

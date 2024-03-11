@@ -39,10 +39,8 @@ from typing import (
     Optional,
     Tuple,
     Type,
-    TypedDict,
     TypeVar,
     Union,
-    cast,
 )
 
 from .types import (
@@ -195,14 +193,8 @@ class DataBase(object):
         """
         return DataBase()  # type: ignore
 
-    def asdict_non_recursive(self):
-        T = TypedDict(
-            type(self).__name__,
-            dict((f.name, f.type) for f in dataclasses.fields(self)),
-        )
-        return cast(
-            T, dict((f.name, getattr(self, f.name)) for f in dataclasses.fields(self))
-        )
+    def asdict_non_recursive(self) -> Dict[str, Any]:
+        return dict((f.name, getattr(self, f.name)) for f in dataclasses.fields(self))
 
 
 @dataclass
