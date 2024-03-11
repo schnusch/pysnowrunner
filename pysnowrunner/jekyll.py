@@ -1,7 +1,8 @@
-#!/usr/bin/env python3
+import argparse
 import hashlib
 import json
 import logging
+import math
 import os
 import pprint
 import shutil
@@ -10,28 +11,39 @@ import tempfile
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from decimal import Decimal
-from typing import (  # noqa: F401
-    Set,
-    Tuple,
-)
-from typing import (
-    Any,
-    Dict,
-    Iterator,
-    List,
-    Optional,
-)
+from typing import Set  # noqa: F401
+from typing import Tuple  # noqa: F401
+from typing import Any, Dict, Iterator, List, Optional, Sequence, TypedDict
 
-from snowrunner import (
-    ChartJsDataset,
-    Engine,
-    StringData,
-    Truck,
-    TruckData,
-    TruckTire,
-    json_decimal_default,
-    round_up,
-)
+from .loader import StringData, TruckData
+from .types import Engine, Truck, TruckTire
+
+
+def round_up(x: Decimal) -> Decimal:
+    if x == 0:
+        return x
+    e = int(math.log10(x))
+    d = 1
+    while d * 10**e < x:
+        d += 1
+    return Decimal(d * 10**e)
+
+
+def json_decimal_default(x):
+    if isinstance(x, Decimal):
+        return float(x)
+    else:
+        raise TypeError("cannot JSONify %r" % (x,))
+
+
+class _ChartJsDataset(TypedDict, total=False):
+    xAxisID: str
+    yAxisID: str
+
+
+class ChartJsDataset(_ChartJsDataset):
+    label: str
+    data: List[Decimal]
 
 
 class JekyllOutput(object):
@@ -442,24 +454,43 @@ class JekyllOutput(object):
             )
 
 
-if __name__ == "__main__":
+def main(argv: Optional[Sequence[str]] = None) -> None:
+    p = argparse.ArgumentParser(
+        description="Read SnowRunner game data and write to Jekyll _data directory.",
+    )
+    p.add_argument(
+        "-v",
+        "--verbose",
+        action="count",
+        default=0,
+        help="increase verbosity",
+    )
+    p.add_argument("-i", "--input", required=True, help="path to initiak.pak")
+    p.add_argument("-o", "--output", default=os.path.curdir, help="Jekyll directory")
+    args = p.parse_args()
+
+    loglevels = {
+        0: logging.WARNING,
+        1: logging.INFO,
+        2: logging.DEBUG,
+    }
     logging.basicConfig(
         stream=sys.stderr,
-        level=logging.WARNING,
+        level=loglevels.get(args.verbose, logging.DEBUG),
         format="%(name)s %(levelname)-8s :%(lineno)-3d %(message)s",
     )
     # there are lots of "multiple different definitions"
     StringData.logger.setLevel(logging.ERROR + 1)
 
-    data = TruckData.load("initial.pak")
+    data = TruckData.load(args.input)
 
-    jekyll = JekyllOutput(".", data.strings)
+    jekyll = JekyllOutput(args.output, data.strings)
     jekyll.engines(data.engines, data.trucks)
     jekyll.tires(data.tires, data.trucks)
     jekyll.trucks(data.trucks)
 
     h = hashlib.sha256()
-    with open("initial.pak", "rb") as fp:
+    with open(args.input, "rb") as fp:
         for b in iter(lambda: fp.read(16384), b""):
             h.update(b)
     with jekyll.write_data("version.json") as version_file:
@@ -470,3 +501,7 @@ if __name__ == "__main__":
                 "hash": h.hexdigest(),
             },
         )
+
+
+if __name__ == "__main__":
+    main()

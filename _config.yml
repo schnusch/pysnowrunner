@@ -59,4 +59,6 @@ exclude:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+  - pyproject.toml
+  - setup.cfg
   - '*.py'
