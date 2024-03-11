@@ -39,6 +39,7 @@ header_pages:
 - trucks.html
 - tires.html
 - engines.html
+- about.md
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -59,6 +60,8 @@ exclude:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+  - COPYING.md
+  - README.md
   - pyproject.toml
   - setup.cfg
   - '*.py'
