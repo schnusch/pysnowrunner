@@ -1,6 +1,6 @@
 {%- assign n = include.trucks | size %}
 {%- if n > 0 -%}
-<h3>Trucks</h3>
+<{{ include.h | default: "h3" }}>Trucks</{{ include.h | default: "h3" }}>
 <ul>
   {%- assign trucks = include.trucks | sort_natural: "display_name" %}
   {%- for truck in trucks %}
