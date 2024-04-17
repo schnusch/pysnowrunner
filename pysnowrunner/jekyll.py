@@ -23,9 +23,11 @@ import logging
 import math
 import os
 import pprint
+import re
 import shutil
 import sys
 import tempfile
+import urllib.parse
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from decimal import Decimal
@@ -35,6 +37,25 @@ from typing import Any, Dict, Iterator, List, Optional, Sequence, TypedDict
 
 from .loader import StringData, TruckData
 from .types import Engine, Truck, TruckTire
+
+
+def uncyrillic(x: str) -> str:
+    cyrillic = {
+        "\u0415": "E",  # CYRILLIC CAPITAL LETTER IE
+        "\u041C": "M",  # CYRILLIC CAPITAL LETTER EM
+        "\u0421": "C",  # CYRILLIC CAPITAL LETTER ES
+        "\u0422": "T",  # CYRILLIC CAPITAL LETTER TE
+    }
+    regex = "|".join(cyrillic.keys())
+
+    def repl(m: re.Match) -> str:
+        return cyrillic[m[0]]
+
+    return re.sub(regex, repl, x)
+
+
+def slugify(x: str) -> str:
+    return re.sub(r"[^0-9a-z]+", "-", x.lower()).strip("-")
 
 
 def round_up(x: Decimal) -> Decimal:
@@ -441,12 +462,68 @@ class JekyllOutput(object):
                 }
             )
 
+        urls = []
+        try:
+            urls.append(
+                {"site": "MapRunner", "url": self.get_maprunner_url(slug, truck)}
+            )
+        except ValueError:
+            pass
+        try:
+            urls.append({"site": "Wiki", "url": self.get_wiki_url(slug, truck)})
+        except ValueError:
+            pass
+
         return {
             "slug": slug,
             "display_name": self.strings[truck.UiName],
+            "urls": urls,
             "charts": charts,
             "python": pprint.pformat(truck),
         }
+
+    def get_maprunner_url(self, slug: str, truck: Truck) -> str:
+        if (
+            slug.startswith("semitrailer_")
+            or slug.startswith("trailer_")
+            or slug.startswith("scout_trailer_")
+            or slug in {"cargo_cabin_01", "train"}
+        ):
+            raise ValueError(
+                "maprunner.info has no vehicle page for %r: %r"
+                % (slug, uncyrillic(self.strings[truck.UiName]))
+            )
+        try:
+            x = {
+                "ford_f750": "ford-f750",
+                "international_hx_520": "international-hx520",
+                "pacific_p512": "pacific-p512",
+                "voron_ae4380": "voron-ae4380",
+                "voron_d53233": "voron-d53233",
+            }[slug]
+        except KeyError:
+            x = slugify(uncyrillic(self.strings[truck.UiName]))
+        url = "https://www.maprunner.info/vehicles/" + x
+        # TODO HEAD request
+        return url
+
+    def get_wiki_url(self, slug: str, truck: Truck) -> str:
+        if (
+            slug.startswith("semitrailer_")
+            or slug.startswith("trailer_")
+            or slug.startswith("scout_trailer_")
+            or slug in {"cargo_cabin_01", "train"}
+        ):
+            return (
+                "https://spintires.fandom.com/wiki/Special:Search?query="
+                + urllib.parse.quote_plus(uncyrillic(self.strings[truck.UiName]))
+            )
+        x = urllib.parse.quote(uncyrillic(self.strings[truck.UiName])).replace(
+            "%20", "_"
+        )
+        url = "https://spintires.fandom.com/wiki/" + x
+        # TODO HEAD request
+        return url
 
     def trucks(self, trucks: Dict[str, Truck]) -> None:
         max_torque = Decimal(0)

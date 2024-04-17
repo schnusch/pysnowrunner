@@ -25,14 +25,16 @@ append_head: |-
   <div class="truck">
     <img alt="Image of {{ truck.display_name }}" src="https://raw.githubusercontent.com/VerZsuT/SnowRunner-XML-Editor-Desktop/main/src/images/trucks/{{ truck.slug }}.jpg" />
     <div class="info">
-      <p>
-        {{- "" -}}
-        Links:
-        <a href="https://www.maprunner.info/vehicles/{{ truck.display_name | slugify }}" target="_blank">MapRunner</a>
+    {%- if truck.urls %}
+      <p>Links:
+      {%- for url in truck.urls %}
+        {%- unless forloop.first %}
         &centerdot;
-        <a href="https://spintires.fandom.com/wiki/{{ truck.display_name | cgi_escape | replace: "+", "_" }}" target="_blank">Wiki</a>
-        {{- "" -}}
+        {%- endunless %}
+        <a href="{{ url.url }}" target="_blank">{{ url.site }}</a>
+      {%- endfor -%}
       </p>
+    {%- endif %}
     {% for chart in truck.charts -%}
       <h3>{{ chart.name }}</h3>
       <details class="h4" open="">
