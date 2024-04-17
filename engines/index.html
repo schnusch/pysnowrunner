@@ -1,0 +1,2885 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Engines | Snowrunner Data</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Engines" />
+<meta name="author" content="GitHub User" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="SnowRunner game data extracted from the game files." />
+<meta property="og:description" content="SnowRunner game data extracted from the game files." />
+<link rel="canonical" href="https://schnusch.github.io/pysnowrunner/engines/" />
+<meta property="og:url" content="https://schnusch.github.io/pysnowrunner/engines/" />
+<meta property="og:site_name" content="Snowrunner Data" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Engines" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"GitHub User"},"description":"SnowRunner game data extracted from the game files.","headline":"Engines","url":"https://schnusch.github.io/pysnowrunner/engines/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/pysnowrunner/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://schnusch.github.io/pysnowrunner/feed.xml" title="Snowrunner Data" /><script src="https://unpkg.com/chart.js@4.4.2" integrity="sha256-x+LL+wNI+ZAd7MSX8xbB/qhCAgm2EEEv+4j9PVFvnTA=" crossorigin="anonymous" defer=""></script>
+<script>
+  const charts = [];
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log({"type":"bar","data":{"labels":["Kr 37 model 166","Kr 71.C","Kr 104","AAT-6V 4,0","Kr 115","AAT-6V 4,4","Kr 120-АТ","Het/6V 5,0","GForce-4V 11.0T","AAT-8V 5,2 Custom","Kr 135-T","Kr 'Kastom' 160","TAG-404","Azov AM-4v 146","Het/4 Ace 106kW","Azov AM-4v 160","Het/8V 5,8","Het/8V 6,2","LAZ 8 T310 Tractor","Het/10V 6,6","Het/8V 6,2T","KZGT-8 490","LAZ 6 T60","Si-6V/1900","DAN-8C 370","LAZ 6 T195","Westline V6 2420","Si-6V/2100T","IMZ-8 520 AT","LAZ 6T173 \"Voin\"","Gb-8V 31 Special","Gb-6V 2400A","Westline V6 2350T","IMZ-6 210","LAZ 8 T260","Si-8V/2300","Gb-8V 2300c","Si-6V/2380","A6V-2330","KZGT-8 420T","Azov AM-8 14","A12V-780","KZGT-8 530 T","NavGlobal D12-T 900","A12V-780","MC-V6 11.OT","LAZ 8 T290","Gb-8V 2600TTA","LAZ 6 TA240","A12V-850TTA","Azov AM-8 15,3","A12V-850TTA","Gb-8V 2700T","IMZ-6 370","IMZ-8 330-T","IMZ-12 1000T","A16V-2000","TUSK12-530-Р2","KZGT-8 490","Si-8V/2900TTA","Azov AM-8 16,1","AZ-12 1400DTA","Westline V12 M900","Si-8V/2850Tc","Westline V16 M2300","MC-V8 FuelMiser","Prime С13","Gb-8V 3200","TUSK12-850-Р4Т","IMZ-8 520 AT","MC-V8 13.OT","IMZ-8 17,0T","IMZ-8 17,0T","SBR6-250-R1","Azov SAM-8 14","Westline V16 M2450","KZGT-8 530 T","H6 15.OL Wanderer","STORM3120Т","Gb-8V 3500T","SBR6-250-R2"],"datasets":[{"label":"Torque","data":[20000.0,25000.0,30000.0,35000.0,40000.0,42000.0,46500.0,50000.0,58000.0,60000.0,70000.0,72000.0,80000.0,80000.0,90000.0,90000.0,90000.0,110000.0,115000.0,120000.0,120000.0,130000.0,130000.0,135000.0,140000.0,140000.0,140000.0,145000.0,150000.0,150000.0,150000.0,155000.0,155000.0,160000.0,160000.0,160000.0,160000.0,160000.0,170000.0,170000.0,170000.0,175000.0,175000.0,175000.0,175000.0,176500.0,180000.0,180000.0,185000.0,190000.0,190000.0,190000.0,192000.0,200000.0,200000.0,200000.0,200000.0,203000.0,205000.0,210000.0,210000.0,210000.0,210000.0,220000.0,220000.0,222000.0,228000.0,230000.0,230000.0,230000.0,232000.0,235000.0,235000.0,245000.0,250000.0,250000.0,260000.0,265000.0,265000.0,280000.0,288000.0],"xAxisID":"x"},{"label":"Fuel Consumption","data":[0.4,0.7,0.6,1.3,1.1,1.7,1.4,2.0,1.85,3.3,1.5,1.9,5.2,1.7,1.1,1.9,0.9,1.1,9.0,5.5,1.3,9.0,4.5,5.5,10.0,5.5,7.5,6.0,10.0,5.0,7.0,5.0,6.5,6.0,6.5,6.0,5.0,7.0,9.5,11.5,6.0,8.5,11.5,8.5,8.5,8.0,7.5,6.5,7.5,9.0,7.0,9.0,7.5,8.5,8.5,13.0,9.5,20.0,9.0,6.5,8.5,11.5,10.0,8.5,11.0,9.5,8.8,8.0,17.0,10.0,10.0,8.2,8.2,10.8,6.0,12.5,11.5,12.0,14.0,12.0,18.0],"xAxisID":"x2"}]},"options":{"maintainAspectRatio":false,"indexAxis":"y","scales":{"y":{"ticks":{"autoSkip":false},"stepSize":1},"x":{"type":"linear","beginAtZero":true,"max":300000.0,"display":true,"position":"top"},"x2":{"type":"linear","beginAtZero":true,"max":20.0,"display":true,"position":"bottom","grid":{"drawOnChartArea":false}}}}});
+    new Chart(document.getElementById("chart-engines"), {"type":"bar","data":{"labels":["Kr 37 model 166","Kr 71.C","Kr 104","AAT-6V 4,0","Kr 115","AAT-6V 4,4","Kr 120-АТ","Het/6V 5,0","GForce-4V 11.0T","AAT-8V 5,2 Custom","Kr 135-T","Kr 'Kastom' 160","TAG-404","Azov AM-4v 146","Het/4 Ace 106kW","Azov AM-4v 160","Het/8V 5,8","Het/8V 6,2","LAZ 8 T310 Tractor","Het/10V 6,6","Het/8V 6,2T","KZGT-8 490","LAZ 6 T60","Si-6V/1900","DAN-8C 370","LAZ 6 T195","Westline V6 2420","Si-6V/2100T","IMZ-8 520 AT","LAZ 6T173 \"Voin\"","Gb-8V 31 Special","Gb-6V 2400A","Westline V6 2350T","IMZ-6 210","LAZ 8 T260","Si-8V/2300","Gb-8V 2300c","Si-6V/2380","A6V-2330","KZGT-8 420T","Azov AM-8 14","A12V-780","KZGT-8 530 T","NavGlobal D12-T 900","A12V-780","MC-V6 11.OT","LAZ 8 T290","Gb-8V 2600TTA","LAZ 6 TA240","A12V-850TTA","Azov AM-8 15,3","A12V-850TTA","Gb-8V 2700T","IMZ-6 370","IMZ-8 330-T","IMZ-12 1000T","A16V-2000","TUSK12-530-Р2","KZGT-8 490","Si-8V/2900TTA","Azov AM-8 16,1","AZ-12 1400DTA","Westline V12 M900","Si-8V/2850Tc","Westline V16 M2300","MC-V8 FuelMiser","Prime С13","Gb-8V 3200","TUSK12-850-Р4Т","IMZ-8 520 AT","MC-V8 13.OT","IMZ-8 17,0T","IMZ-8 17,0T","SBR6-250-R1","Azov SAM-8 14","Westline V16 M2450","KZGT-8 530 T","H6 15.OL Wanderer","STORM3120Т","Gb-8V 3500T","SBR6-250-R2"],"datasets":[{"label":"Torque","data":[20000.0,25000.0,30000.0,35000.0,40000.0,42000.0,46500.0,50000.0,58000.0,60000.0,70000.0,72000.0,80000.0,80000.0,90000.0,90000.0,90000.0,110000.0,115000.0,120000.0,120000.0,130000.0,130000.0,135000.0,140000.0,140000.0,140000.0,145000.0,150000.0,150000.0,150000.0,155000.0,155000.0,160000.0,160000.0,160000.0,160000.0,160000.0,170000.0,170000.0,170000.0,175000.0,175000.0,175000.0,175000.0,176500.0,180000.0,180000.0,185000.0,190000.0,190000.0,190000.0,192000.0,200000.0,200000.0,200000.0,200000.0,203000.0,205000.0,210000.0,210000.0,210000.0,210000.0,220000.0,220000.0,222000.0,228000.0,230000.0,230000.0,230000.0,232000.0,235000.0,235000.0,245000.0,250000.0,250000.0,260000.0,265000.0,265000.0,280000.0,288000.0],"xAxisID":"x"},{"label":"Fuel Consumption","data":[0.4,0.7,0.6,1.3,1.1,1.7,1.4,2.0,1.85,3.3,1.5,1.9,5.2,1.7,1.1,1.9,0.9,1.1,9.0,5.5,1.3,9.0,4.5,5.5,10.0,5.5,7.5,6.0,10.0,5.0,7.0,5.0,6.5,6.0,6.5,6.0,5.0,7.0,9.5,11.5,6.0,8.5,11.5,8.5,8.5,8.0,7.5,6.5,7.5,9.0,7.0,9.0,7.5,8.5,8.5,13.0,9.5,20.0,9.0,6.5,8.5,11.5,10.0,8.5,11.0,9.5,8.8,8.0,17.0,10.0,10.0,8.2,8.2,10.8,6.0,12.5,11.5,12.0,14.0,12.0,18.0],"xAxisID":"x2"}]},"options":{"maintainAspectRatio":false,"indexAxis":"y","scales":{"y":{"ticks":{"autoSkip":false},"stepSize":1},"x":{"type":"linear","beginAtZero":true,"max":300000.0,"display":true,"position":"top"},"x2":{"type":"linear","beginAtZero":true,"max":20.0,"display":true,"position":"bottom","grid":{"drawOnChartArea":false}}}}});
+  });
+</script></head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/pysnowrunner/">Snowrunner Data</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/pysnowrunner/trucks/">Trucks</a><a class="page-link" href="/pysnowrunner/tires/">Tires</a><a class="page-link" href="/pysnowrunner/engines/">Engines</a><a class="page-link" href="/pysnowrunner/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Engines</h1>
+  </header>
+
+  <div class="post-content">
+    
+<p><div class="chart" style="height: calc(2em + 81em);"><canvas id="chart-engines"></canvas></div></p>
+<details id="a12v-780" class="h2 engine" open="">
+  <summary><div><h2>A12V-780</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">175000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">8.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#kenworth_963">Kenworth 963</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('180'),
+       EngineResponsiveness=Decimal('0.1'),
+       FuelConsumption=Decimal('8.5'),
+       Torque=Decimal('175000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.6'),
+       Name='us_truck_old_heavy_engine_0',
+       UiName='UI_ENGINE_US_TRUCK_OLD_HEAVY_0_NAME')</pre>
+  </details>
+</details>
+<details id="a12v-780" class="h2 engine" open="">
+  <summary><div><h2>A12V-780</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">175000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">8.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#ank_mk38">ANK MK38</a></li>
+  <li><a href="/pysnowrunner/trucks/#ank_mk38_ht">ANK MK38 CIVILIAN</a></li>
+  <li><a href="/pysnowrunner/trucks/#derry_longhorn_3194">Derry Longhorn 3194</a></li>
+  <li><a href="/pysnowrunner/trucks/#pacific_p12w">Pacific P12</a></li>
+  <li><a href="/pysnowrunner/trucks/#pacific_p16">Pacific P16</a></li>
+  <li><a href="/pysnowrunner/trucks/#pacific_p512">Pacific P512 PF</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('180'),
+       EngineResponsiveness=Decimal('0.1'),
+       FuelConsumption=Decimal('8.5'),
+       Torque=Decimal('175000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.6'),
+       Name='us_truck_old_heavy_engine_0',
+       UiName='UI_ENGINE_US_TRUCK_OLD_HEAVY_0_NAME')</pre>
+  </details>
+</details>
+<details id="a12v-850tta" class="h2 engine" open="">
+  <summary><div><h2>A12V-850TTA</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">190000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">9.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#kenworth_963">Kenworth 963</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('240'),
+       EngineResponsiveness=Decimal('0.15'),
+       FuelConsumption=Decimal('9.0'),
+       Torque=Decimal('190000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.7'),
+       Name='us_truck_old_heavy_engine_1',
+       UiName='UI_ENGINE_US_TRUCK_OLD_HEAVY_1_NAME')</pre>
+  </details>
+</details>
+<details id="a12v-850tta" class="h2 engine" open="">
+  <summary><div><h2>A12V-850TTA</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">190000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">9.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#ank_mk38">ANK MK38</a></li>
+  <li><a href="/pysnowrunner/trucks/#ank_mk38_ht">ANK MK38 CIVILIAN</a></li>
+  <li><a href="/pysnowrunner/trucks/#derry_longhorn_3194">Derry Longhorn 3194</a></li>
+  <li><a href="/pysnowrunner/trucks/#pacific_p12w">Pacific P12</a></li>
+  <li><a href="/pysnowrunner/trucks/#pacific_p16">Pacific P16</a></li>
+  <li><a href="/pysnowrunner/trucks/#pacific_p512">Pacific P512 PF</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('240'),
+       EngineResponsiveness=Decimal('0.15'),
+       FuelConsumption=Decimal('9.0'),
+       Torque=Decimal('190000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.7'),
+       Name='us_truck_old_heavy_engine_1',
+       UiName='UI_ENGINE_US_TRUCK_OLD_HEAVY_1_NAME')</pre>
+  </details>
+</details>
+<details id="a16v-2000" class="h2 engine" open="">
+  <summary><div><h2>A16V-2000</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">200000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">9.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#cat_745c">Caterpillar 745С</a></li>
+  <li><a href="/pysnowrunner/trucks/#cat_770g">Caterpillar 770G</a></li>
+  <li><a href="/pysnowrunner/trucks/#derry_special_15c177">Derry Special 15C-177</a></li>
+  <li><a href="/pysnowrunner/trucks/#paystar_5600ts">International Paystar 5600TS</a></li>
+  <li><a href="/pysnowrunner/trucks/#ws_6900xd_twin">Western Star 6900 TwinSteer</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('240'),
+       EngineResponsiveness=Decimal('0.035'),
+       FuelConsumption=Decimal('9.5'),
+       Torque=Decimal('200000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='us_special_engine_0',
+       UiName='UI_ENGINE_US_SPECIAL_0_NAME')</pre>
+  </details>
+</details>
+<details id="a6v-2330" class="h2 engine" open="">
+  <summary><div><h2>A6V-2330</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">170000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">9.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#gmc_8000">GMC Brigadier 8000</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('230'),
+       EngineResponsiveness=Decimal('0.035'),
+       FuelConsumption=Decimal('9.5'),
+       Torque=Decimal('170000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.9'),
+       Name='us_truck_old_engine_gmc8000',
+       UiName='UI_ENGINE_US_TRUCK_OLD_GMC8000_NAME')</pre>
+  </details>
+</details>
+<details id="aat-6v-4-0" class="h2 engine" open="">
+  <summary><div><h2>AAT-6V 4,0</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">35000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">1.3</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#chevy_apache">Chevrolet Apache</a></li>
+  <li><a href="/pysnowrunner/trucks/#chevrolet_ck1500">Chevrolet CK1500</a></li>
+  <li><a href="/pysnowrunner/trucks/#ford_f750">Ford F 750</a></li>
+  <li><a href="/pysnowrunner/trucks/#jeep_cj7_renegade">Jeep CJ7 Renegade</a></li>
+  <li><a href="/pysnowrunner/trucks/#mtb_8106">MTB 8106 (Rock Grinder)</a></li>
+  <li><a href="/pysnowrunner/trucks/#neo_falcon_2000">Neo Falcon 2000</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_scout_800">Scout 800</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('100'),
+       EngineResponsiveness=Decimal('0.25'),
+       FuelConsumption=Decimal('1.3'),
+       Torque=Decimal('35000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='us_scout_old_engine_0',
+       UiName='UI_ENGINE_US_SCOUT_OLD_0_NAME')</pre>
+  </details>
+</details>
+<details id="aat-6v-4-4" class="h2 engine" open="">
+  <summary><div><h2>AAT-6V 4,4</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">42000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">1.7</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#chevy_apache">Chevrolet Apache</a></li>
+  <li><a href="/pysnowrunner/trucks/#chevrolet_ck1500">Chevrolet CK1500</a></li>
+  <li><a href="/pysnowrunner/trucks/#ford_f750">Ford F 750</a></li>
+  <li><a href="/pysnowrunner/trucks/#jeep_cj7_renegade">Jeep CJ7 Renegade</a></li>
+  <li><a href="/pysnowrunner/trucks/#mtb_8106">MTB 8106 (Rock Grinder)</a></li>
+  <li><a href="/pysnowrunner/trucks/#neo_falcon_2000">Neo Falcon 2000</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_scout_800">Scout 800</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.4'),
+       DamageCapacity=Decimal('100'),
+       EngineResponsiveness=Decimal('0.3'),
+       FuelConsumption=Decimal('1.7'),
+       Torque=Decimal('42000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.5'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.5'),
+       Name='us_scout_old_engine_1',
+       UiName='UI_ENGINE_US_SCOUT_OLD_1_NAME')</pre>
+  </details>
+</details>
+<details id="aat-8v-5-2-custom" class="h2 engine" open="">
+  <summary><div><h2>AAT-8V 5,2 Custom</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">60000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">3.3</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#chevy_apache">Chevrolet Apache</a></li>
+  <li><a href="/pysnowrunner/trucks/#chevrolet_ck1500">Chevrolet CK1500</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('100'),
+       EngineResponsiveness=Decimal('0.25'),
+       FuelConsumption=Decimal('3.3'),
+       Torque=Decimal('60000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.8'),
+       Name='us_scout_old_engine_ck1500',
+       UiName='UI_ENGINE_US_SCOUT_OLD_CK1500_NAME')</pre>
+  </details>
+</details>
+<details id="az-12-1400dta" class="h2 engine" open="">
+  <summary><div><h2>AZ-12 1400DTA</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">210000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">11.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#navistar_5000mv">Navistar 5000-MV</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.8'),
+       DamageCapacity=Decimal('360'),
+       EngineResponsiveness=Decimal('0.35'),
+       FuelConsumption=Decimal('11.5'),
+       Torque=Decimal('210000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.5'),
+       Name='us_truck_military_navistar_1',
+       UiName='UI_ENGINE_US_TRUCK_MILITARY_NAVISTAR_1_NAME')</pre>
+  </details>
+</details>
+<details id="azov-am-4v-146" class="h2 engine" open="">
+  <summary><div><h2>Azov AM-4v 146</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">80000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">1.7</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#khan_317_sentinel">KHAN 317 Sentinel</a></li>
+  <li><a href="/pysnowrunner/trucks/#khan_39_marshall">KHAN 39 Marshall</a></li>
+  <li><a href="/pysnowrunner/trucks/#yar_87">YAR 87</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('150'),
+       EngineResponsiveness=Decimal('0.4'),
+       FuelConsumption=Decimal('1.7'),
+       Torque=Decimal('80000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.3'),
+       Name='ru_scout_modern_engine_1',
+       UiName='UI_ENGINE_RU_SCOUT_MODERN_1_NAME')</pre>
+  </details>
+</details>
+<details id="azov-am-4v-160" class="h2 engine" open="">
+  <summary><div><h2>Azov AM-4v 160</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">90000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">1.9</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#khan_317_sentinel">KHAN 317 Sentinel</a></li>
+  <li><a href="/pysnowrunner/trucks/#khan_39_marshall">KHAN 39 Marshall</a></li>
+  <li><a href="/pysnowrunner/trucks/#yar_87">YAR 87</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('170'),
+       EngineResponsiveness=Decimal('0.45'),
+       FuelConsumption=Decimal('1.9'),
+       Torque=Decimal('90000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.4'),
+       Name='ru_scout_modern_engine_2',
+       UiName='UI_ENGINE_RU_SCOUT_MODERN_2_NAME')</pre>
+  </details>
+</details>
+<details id="azov-am-8-14" class="h2 engine" open="">
+  <summary><div><h2>Azov AM-8 14</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">170000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">6.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#azov_43_191_sprinter">Azov 43-191 "Sprinter"</a></li>
+  <li><a href="/pysnowrunner/trucks/#azov_5319">Azov 5319</a></li>
+  <li><a href="/pysnowrunner/trucks/#azov_64131">Azov 64131</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_phoenix">Tatra PHOENIX</a></li>
+  <li><a href="/pysnowrunner/trucks/#tuz_108_warthog">TUZ 108 "Warthog"</a></li>
+  <li><a href="/pysnowrunner/trucks/#voron_grad">Voron Grad</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('210'),
+       EngineResponsiveness=Decimal('0.042'),
+       FuelConsumption=Decimal('6.0'),
+       Torque=Decimal('170000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='ru_truck_modern_engine_0',
+       UiName='UI_ENGINE_RU_TRUCK_MODERN_0_NAME')</pre>
+  </details>
+</details>
+<details id="azov-am-8-15-3" class="h2 engine" open="">
+  <summary><div><h2>Azov AM-8 15,3</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">190000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">7.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#azov_43_191_sprinter">Azov 43-191 "Sprinter"</a></li>
+  <li><a href="/pysnowrunner/trucks/#azov_5319">Azov 5319</a></li>
+  <li><a href="/pysnowrunner/trucks/#azov_64131">Azov 64131</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_phoenix">Tatra PHOENIX</a></li>
+  <li><a href="/pysnowrunner/trucks/#tuz_108_warthog">TUZ 108 "Warthog"</a></li>
+  <li><a href="/pysnowrunner/trucks/#voron_grad">Voron Grad</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('230'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('7.0'),
+       Torque=Decimal('190000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.3'),
+       Name='ru_truck_modern_engine_1',
+       UiName='UI_ENGINE_RU_TRUCK_MODERN_1_NAME')</pre>
+  </details>
+</details>
+<details id="azov-am-8-16-1" class="h2 engine" open="">
+  <summary><div><h2>Azov AM-8 16,1</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">210000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">8.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#azov_43_191_sprinter">Azov 43-191 "Sprinter"</a></li>
+  <li><a href="/pysnowrunner/trucks/#azov_5319">Azov 5319</a></li>
+  <li><a href="/pysnowrunner/trucks/#azov_64131">Azov 64131</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_phoenix">Tatra PHOENIX</a></li>
+  <li><a href="/pysnowrunner/trucks/#tuz_108_warthog">TUZ 108 "Warthog"</a></li>
+  <li><a href="/pysnowrunner/trucks/#voron_grad">Voron Grad</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('250'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('8.5'),
+       Torque=Decimal('210000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.1'),
+       Name='ru_truck_modern_engine_2',
+       UiName='UI_ENGINE_RU_TRUCK_MODERN_2_NAME')</pre>
+  </details>
+</details>
+<details id="azov-sam-8-14" class="h2 engine" open="">
+  <summary><div><h2>Azov SAM-8 14</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">250000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">6.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#azov_43_191_sprinter">Azov 43-191 "Sprinter"</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('210'),
+       EngineResponsiveness=Decimal('0.042'),
+       FuelConsumption=Decimal('6.0'),
+       Torque=Decimal('250000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.1'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='ru_azov_sprinter_custom_engine',
+       UiName='UI_ENGINE_SPORT_NAME')</pre>
+  </details>
+</details>
+<details id="dan-8c-370" class="h2 engine" open="">
+  <summary><div><h2>DAN-8C 370</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">140000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">10.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#kirovets_k7m">Kirovets K-7М</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('270'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('10.0'),
+       Torque=Decimal('140000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.3'),
+       Name='ru_kirovets_k7m_engine_1',
+       UiName='UI_ENGINE_RU_SPECIAL_M_1_NAME')</pre>
+  </details>
+</details>
+<details id="gb-6v-2400a" class="h2 engine" open="">
+  <summary><div><h2>Gb-6V 2400A</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">155000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">5.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#ford_clt9000">Ford CLT9000</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('180'),
+       EngineResponsiveness=Decimal('0.035'),
+       FuelConsumption=Decimal('5.0'),
+       Torque=Decimal('155000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.5'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.7'),
+       Name='us_truck_old_engine_clt',
+       UiName='UI_ENGINE_US_TRUCK_OLD_CLT_NAME')</pre>
+  </details>
+</details>
+<details id="gb-8v-2300c" class="h2 engine" open="">
+  <summary><div><h2>Gb-8V 2300c</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">160000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">5.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#cat_ct680">Caterpillar CT680</a></li>
+  <li><a href="/pysnowrunner/trucks/#cat_ct681">Caterpillar CT681</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_hx_520">International HX 520</a></li>
+  <li><a href="/pysnowrunner/trucks/#royal_bm17">Royal BM17</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.5'),
+       DamageCapacity=Decimal('150'),
+       EngineResponsiveness=Decimal('0.15'),
+       FuelConsumption=Decimal('5.0'),
+       Torque=Decimal('160000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='us_truck_modern_engine_cat_royal',
+       UiName='UI_ENGINE_US_TRUCK_MODERN_CAT_ROYAL_NAME')</pre>
+  </details>
+</details>
+<details id="gb-8v-2600tta" class="h2 engine" open="">
+  <summary><div><h2>Gb-8V 2600TTA</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">180000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">6.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#aramatsu_forester">Aramatsu Forester</a></li>
+  <li><a href="/pysnowrunner/trucks/#cat_ct680">Caterpillar CT680</a></li>
+  <li><a href="/pysnowrunner/trucks/#cat_ct681">Caterpillar CT681</a></li>
+  <li><a href="/pysnowrunner/trucks/#derry_longhorn_4520">Derry Longhorn 4520</a></li>
+  <li><a href="/pysnowrunner/trucks/#freightliner_m916a1">Freightliner M916A1</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_hx_520">International HX 520</a></li>
+  <li><a href="/pysnowrunner/trucks/#kenworth_w990">Kenworth W990</a></li>
+  <li><a href="/pysnowrunner/trucks/#royal_bm17">Royal BM17</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_nf1424">Western Star 47X NF 1424</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_nf1430">Western Star 47X NF 1430</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_49x">Western Star 49X</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_57x">Western Star 57X</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('180'),
+       EngineResponsiveness=Decimal('0.25'),
+       FuelConsumption=Decimal('6.5'),
+       Torque=Decimal('180000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.3'),
+       Name='us_truck_modern_engine_1',
+       UiName='UI_ENGINE_US_TRUCK_MODERN_1_NAME')</pre>
+  </details>
+</details>
+<details id="gb-8v-2700t" class="h2 engine" open="">
+  <summary><div><h2>Gb-8V 2700T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">192000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">7.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#aramatsu_forester">Aramatsu Forester</a></li>
+  <li><a href="/pysnowrunner/trucks/#cat_ct680">Caterpillar CT680</a></li>
+  <li><a href="/pysnowrunner/trucks/#cat_ct681">Caterpillar CT681</a></li>
+  <li><a href="/pysnowrunner/trucks/#derry_longhorn_4520">Derry Longhorn 4520</a></li>
+  <li><a href="/pysnowrunner/trucks/#freightliner_m916a1">Freightliner M916A1</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_hx_520">International HX 520</a></li>
+  <li><a href="/pysnowrunner/trucks/#kenworth_w990">Kenworth W990</a></li>
+  <li><a href="/pysnowrunner/trucks/#royal_bm17">Royal BM17</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_nf1424">Western Star 47X NF 1424</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_nf1430">Western Star 47X NF 1430</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_49x">Western Star 49X</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_57x">Western Star 57X</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('220'),
+       EngineResponsiveness=Decimal('0.3'),
+       FuelConsumption=Decimal('7.5'),
+       Torque=Decimal('192000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.1'),
+       Name='us_truck_modern_engine_2',
+       UiName='UI_ENGINE_US_TRUCK_MODERN_2_NAME')</pre>
+  </details>
+</details>
+<details id="gb-8v-31-special" class="h2 engine" open="">
+  <summary><div><h2>Gb-8V 31 Special</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">150000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">7.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#international_paystar_5070">International Paystar 5070</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('180'),
+       EngineResponsiveness=Decimal('0.04'),
+       FuelConsumption=Decimal('7.0'),
+       Torque=Decimal('150000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.6'),
+       Name='us_truck_old_paystar5070',
+       UiName='UI_ENGINE_US_TRUCK_OLD_PAYSTAR5070_NAME')</pre>
+  </details>
+</details>
+<details id="gb-8v-3200" class="h2 engine" open="">
+  <summary><div><h2>Gb-8V 3200</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">230000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">8.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#derry_longhorn_4520">Derry Longhorn 4520</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.5'),
+       DamageCapacity=Decimal('190'),
+       EngineResponsiveness=Decimal('0.25'),
+       FuelConsumption=Decimal('8.0'),
+       Torque=Decimal('230000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.05'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='us_truck_modern_engine_longhorn_4520',
+       UiName='UI_ENGINE_US_TRUCK_MODERN_LONGHORN_4520_NAME')</pre>
+  </details>
+</details>
+<details id="gb-8v-3500t" class="h2 engine" open="">
+  <summary><div><h2>Gb-8V 3500T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">280000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">12.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#derry_special_15c177">Derry Special 15C-177</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.4'),
+       DamageCapacity=Decimal('300'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('12'),
+       Torque=Decimal('280000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.05'),
+       DamagedConsumptionModifier=Decimal('1.5'),
+       Name='us_truck_modern_engine_derry_special',
+       UiName='UI_ENGINE_US_TRUCK_MODERN_DERRY_SPECIAL_NAME')</pre>
+  </details>
+</details>
+<details id="gforce-4v-11-0t" class="h2 engine" open="">
+  <summary><div><h2>GForce-4V 11.0T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">58000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">1.85</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#mtb_8106">MTB 8106 (Rock Grinder)</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.65'),
+       DamageCapacity=Decimal('130'),
+       EngineResponsiveness=Decimal('0.37'),
+       FuelConsumption=Decimal('1.85'),
+       Torque=Decimal('58000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.04'),
+       DamagedConsumptionModifier=Decimal('1.51'),
+       Name='us_special_mtb_8106_gf4v',
+       UiName='UI_ENGINE_US_SPECIAL_GF4V_NAME')</pre>
+  </details>
+</details>
+<details id="h6-15-ol-wanderer" class="h2 engine" open="">
+  <summary><div><h2>H6 15.OL Wanderer</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">265000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">12.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#kenworth_963">Kenworth 963</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('250'),
+       EngineResponsiveness=Decimal('0.2'),
+       FuelConsumption=Decimal('12.0'),
+       Torque=Decimal('265000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.012'),
+       DamagedConsumptionModifier=Decimal('1.6'),
+       Name='us_truck_old_heavy_engine_kenworth_963',
+       UiName='UI_ENGINE_US_TRUCK_OLD_KENWORTH_963_NAME')</pre>
+  </details>
+</details>
+<details id="het-10v-6-6" class="h2 engine" open="">
+  <summary><div><h2>Het/10V 6,6</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">120000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">5.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#ford_f750">Ford F 750</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('100'),
+       EngineResponsiveness=Decimal('0.5'),
+       FuelConsumption=Decimal('5.5'),
+       Torque=Decimal('120000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.015'),
+       DamagedConsumptionModifier=Decimal('2.5'),
+       Name='us_scout_old_engine_f750',
+       UiName='UI_ENGINE_US_SCOUT_OLD_F750_NAME')</pre>
+  </details>
+</details>
+<details id="het-4-ace-106kw" class="h2 engine" open="">
+  <summary><div><h2>Het/4 Ace 106kW</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">90000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">1.1</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#cat_th357">Caterpillar TH357</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('90'),
+       EngineResponsiveness=Decimal('0.01'),
+       FuelConsumption=Decimal('1.1'),
+       Torque=Decimal('90000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='us_special_cat_th357_engine_0',
+       UiName='UI_ENGINE_US_SPECIAL_CAT_TH357_0_NAME')</pre>
+  </details>
+</details>
+<details id="het-6v-5-0" class="h2 engine" open="">
+  <summary><div><h2>Het/6V 5,0</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">50000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">2.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#chevy_apache">Chevrolet Apache</a></li>
+  <li><a href="/pysnowrunner/trucks/#chevrolet_ck1500">Chevrolet CK1500</a></li>
+  <li><a href="/pysnowrunner/trucks/#ford_f750">Ford F 750</a></li>
+  <li><a href="/pysnowrunner/trucks/#jeep_cj7_renegade">Jeep CJ7 Renegade</a></li>
+  <li><a href="/pysnowrunner/trucks/#mtb_8106">MTB 8106 (Rock Grinder)</a></li>
+  <li><a href="/pysnowrunner/trucks/#neo_falcon_2000">Neo Falcon 2000</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_scout_800">Scout 800</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('150'),
+       EngineResponsiveness=Decimal('0.35'),
+       FuelConsumption=Decimal('2.0'),
+       Torque=Decimal('50000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.5'),
+       Name='us_scout_old_engine_2',
+       UiName='UI_ENGINE_US_SCOUT_OLD_2_NAME')</pre>
+  </details>
+</details>
+<details id="het-8v-5-8" class="h2 engine" open="">
+  <summary><div><h2>Het/8V 5,8</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">90000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">0.9</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#hummer_h2">Hummer H2</a></li>
+  <li><a href="/pysnowrunner/trucks/#jeep_wrangler">Jeep Wrangler</a></li>
+  <li><a href="/pysnowrunner/trucks/#land_rover_defender_110">Land Rover Defender 110</a></li>
+  <li><a href="/pysnowrunner/trucks/#land_rover_defender_90">Land Rover Defender 90</a></li>
+  <li><a href="/pysnowrunner/trucks/#rezvani_hercules_6x6">Rezvani Hercules 6x6</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('100'),
+       EngineResponsiveness=Decimal('1.00'),
+       FuelConsumption=Decimal('0.9'),
+       Torque=Decimal('90000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='us_scout_modern_engine_0',
+       UiName='UI_ENGINE_US_SCOUT_MODERN_0_NAME')</pre>
+  </details>
+</details>
+<details id="het-8v-6-2" class="h2 engine" open="">
+  <summary><div><h2>Het/8V 6,2</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">110000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">1.1</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#hummer_h2">Hummer H2</a></li>
+  <li><a href="/pysnowrunner/trucks/#jeep_wrangler">Jeep Wrangler</a></li>
+  <li><a href="/pysnowrunner/trucks/#land_rover_defender_110">Land Rover Defender 110</a></li>
+  <li><a href="/pysnowrunner/trucks/#land_rover_defender_90">Land Rover Defender 90</a></li>
+  <li><a href="/pysnowrunner/trucks/#rezvani_hercules_6x6">Rezvani Hercules 6x6</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('120'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('1.1'),
+       Torque=Decimal('110000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.3'),
+       Name='us_scout_modern_engine_1',
+       UiName='UI_ENGINE_US_SCOUT_MODERN_1_NAME')</pre>
+  </details>
+</details>
+<details id="het-8v-6-2t" class="h2 engine" open="">
+  <summary><div><h2>Het/8V 6,2T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">120000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">1.3</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#hummer_h2">Hummer H2</a></li>
+  <li><a href="/pysnowrunner/trucks/#jeep_wrangler">Jeep Wrangler</a></li>
+  <li><a href="/pysnowrunner/trucks/#land_rover_defender_110">Land Rover Defender 110</a></li>
+  <li><a href="/pysnowrunner/trucks/#land_rover_defender_90">Land Rover Defender 90</a></li>
+  <li><a href="/pysnowrunner/trucks/#rezvani_hercules_6x6">Rezvani Hercules 6x6</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('140'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('1.3'),
+       Torque=Decimal('120000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.4'),
+       Name='us_scout_modern_engine_2',
+       UiName='UI_ENGINE_US_SCOUT_MODERN_2_NAME')</pre>
+  </details>
+</details>
+<details id="imz-12-1000t" class="h2 engine" open="">
+  <summary><div><h2>IMZ-12 1000T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">200000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">13.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#tuz_420_tatarin">TUZ 420 "Tatarin"</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.99'),
+       DamageCapacity=Decimal('300'),
+       EngineResponsiveness=Decimal('0.2'),
+       FuelConsumption=Decimal('13.0'),
+       Torque=Decimal('200000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('1.0'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.4'),
+       Name='ru_tuz_tatarin',
+       UiName='UI_ENGINE_RU_TUZ_TATARIN_NAME')</pre>
+  </details>
+</details>
+<details id="imz-6-210" class="h2 engine" open="">
+  <summary><div><h2>IMZ-6 210</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">160000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">6.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#krs_58_bandit">KRS 58 "Bandit"</a></li>
+  <li><a href="/pysnowrunner/trucks/#step_310e">Step 310Е</a></li>
+  <li><a href="/pysnowrunner/trucks/#step_3364_crocodile">Step 33-64 "Crocodile"</a></li>
+  <li><a href="/pysnowrunner/trucks/#step_39331_pike">Step 39331 "Pike"</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_805">Tatra 805</a></li>
+  <li><a href="/pysnowrunner/trucks/#tuz_16_actaeon">TUZ 16 "Actaeon"</a></li>
+  <li><a href="/pysnowrunner/trucks/#zikz_5368">ZiKZ 5368</a></li>
+  <li><a href="/pysnowrunner/trucks/#zikz_566a">ZiKZ 566A</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('240'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('6.0'),
+       Torque=Decimal('160000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.8'),
+       Name='ru_truck_old_engine_2',
+       UiName='UI_ENGINE_RU_TRUCK_OLD_2_NAME')</pre>
+  </details>
+</details>
+<details id="imz-6-370" class="h2 engine" open="">
+  <summary><div><h2>IMZ-6 370</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">200000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">8.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#zikz_566a">ZiKZ 566A</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('100'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('8.5'),
+       Torque=Decimal('200000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.4'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.7'),
+       Name='ru_truck_old_engine_zikz_566a',
+       UiName='UI_ENGINE_RU_TRUCK_OLD_ZIKZ_566A_NAME')</pre>
+  </details>
+</details>
+<details id="imz-8-17-0t" class="h2 engine" open="">
+  <summary><div><h2>IMZ-8 17,0T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">235000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">8.2</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#tatra_phoenix">Tatra PHOENIX</a></li>
+  <li><a href="/pysnowrunner/trucks/#voron_grad">Voron Grad</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('180'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('8.2'),
+       Torque=Decimal('235000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='ru_truck_modern_engine_grad',
+       UiName='UI_ENGINE_RU_TRUCK_MODERN_GRAD_NAME')</pre>
+  </details>
+</details>
+<details id="imz-8-17-0t" class="h2 engine" open="">
+  <summary><div><h2>IMZ-8 17,0T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">235000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">8.2</td>
+    </tr>
+  </table>
+  
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('180'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('8.2'),
+       Torque=Decimal('235000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='ru_truck_modern_engine_grad',
+       UiName='UI_ENGINE_RU_TRUCK_MODERN_GRAD_NAME')</pre>
+  </details>
+</details>
+<details id="imz-8-330-t" class="h2 engine" open="">
+  <summary><div><h2>IMZ-8 330-T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">200000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">8.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#tayga_6436">Tayga 6436</a></li>
+  <li><a href="/pysnowrunner/trucks/#tayga_6455b">Tayga 6455B</a></li>
+  <li><a href="/pysnowrunner/trucks/#voron_ae4380">Voron AE-4380</a></li>
+  <li><a href="/pysnowrunner/trucks/#voron_d53233">Voron D-53233</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('300'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('8.5'),
+       Torque=Decimal('200000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.5'),
+       Name='ru_truck_old_heavy_engine_2',
+       UiName='UI_ENGINE_RU_TRUCK_OLD_HEAVY_2_NAME')</pre>
+  </details>
+</details>
+<details id="imz-8-520-at" class="h2 engine" open="">
+  <summary><div><h2>IMZ-8 520 AT</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">150000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">10.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#kirovets_k700">Kirovets K-700</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('270'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('10.0'),
+       Torque=Decimal('150000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.3'),
+       Name='ru_kirovets_k700_engine_1',
+       UiName='UI_ENGINE_RU_SPECIAL_1_NAME')</pre>
+  </details>
+</details>
+<details id="imz-8-520-at" class="h2 engine" open="">
+  <summary><div><h2>IMZ-8 520 AT</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">230000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">10.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#azov_4220_antarctic">Azov 42-20 Antarctic</a></li>
+  <li><a href="/pysnowrunner/trucks/#azov_73210">Azov 73210</a></li>
+  <li><a href="/pysnowrunner/trucks/#boar_45318">BOAR 45318</a></li>
+  <li><a href="/pysnowrunner/trucks/#dan_96320">DAN 96320</a></li>
+  <li><a href="/pysnowrunner/trucks/#femm_37at">FEMM 37-AT</a></li>
+  <li><a href="/pysnowrunner/trucks/#kolob_74760">KOLOB 74760</a></li>
+  <li><a href="/pysnowrunner/trucks/#kolob_74941">KOLOB 74941</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_force_t815_7">Tatra FORCE T815-7</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_t813">Tatra Т813</a></li>
+  <li><a href="/pysnowrunner/trucks/#zikz_605r">ZiKZ 605R</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('270'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('10.0'),
+       Torque=Decimal('230000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.3'),
+       Name='ru_special_engine_1',
+       UiName='UI_ENGINE_RU_SPECIAL_1_NAME')</pre>
+  </details>
+</details>
+<details id="kr-kastom-160" class="h2 engine" open="">
+  <summary><div><h2>Kr 'Kastom' 160</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">72000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">1.9</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#don_71">DON 71</a></li>
+  <li><a href="/pysnowrunner/trucks/#gor_by4">Gor BY-4</a></li>
+  <li><a href="/pysnowrunner/trucks/#khan_39_marshall">KHAN 39 Marshall</a></li>
+  <li><a href="/pysnowrunner/trucks/#khan_lo4f">KHAN Lo4F</a></li>
+  <li><a href="/pysnowrunner/trucks/#tuz_166">TUZ 166</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.4'),
+       DamageCapacity=Decimal('70'),
+       EngineResponsiveness=Decimal('0.08'),
+       FuelConsumption=Decimal('1.9'),
+       Torque=Decimal('72000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.6'),
+       Name='ru_scout_old_engine_3',
+       UiName='UI_ENGINE_RU_SCOUT_OLD_3_NAME')</pre>
+  </details>
+</details>
+<details id="kr-104" class="h2 engine" open="">
+  <summary><div><h2>Kr 104</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">30000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">0.6</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#don_71">DON 71</a></li>
+  <li><a href="/pysnowrunner/trucks/#gor_by4">Gor BY-4</a></li>
+  <li><a href="/pysnowrunner/trucks/#khan_39_marshall">KHAN 39 Marshall</a></li>
+  <li><a href="/pysnowrunner/trucks/#khan_lo4f">KHAN Lo4F</a></li>
+  <li><a href="/pysnowrunner/trucks/#tuz_166">TUZ 166</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('120'),
+       EngineResponsiveness=Decimal('0.04'),
+       FuelConsumption=Decimal('0.6'),
+       Torque=Decimal('30000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.1'),
+       Name='ru_scout_old_engine_0',
+       UiName='UI_ENGINE_RU_SCOUT_OLD_0_NAME')</pre>
+  </details>
+</details>
+<details id="kr-115" class="h2 engine" open="">
+  <summary><div><h2>Kr 115</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">40000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">1.1</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#don_71">DON 71</a></li>
+  <li><a href="/pysnowrunner/trucks/#gor_by4">Gor BY-4</a></li>
+  <li><a href="/pysnowrunner/trucks/#khan_39_marshall">KHAN 39 Marshall</a></li>
+  <li><a href="/pysnowrunner/trucks/#khan_lo4f">KHAN Lo4F</a></li>
+  <li><a href="/pysnowrunner/trucks/#tuz_166">TUZ 166</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('120'),
+       EngineResponsiveness=Decimal('0.09'),
+       FuelConsumption=Decimal('1.1'),
+       Torque=Decimal('40000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.3'),
+       Name='ru_scout_old_engine_1',
+       UiName='UI_ENGINE_RU_SCOUT_OLD_1_NAME')</pre>
+  </details>
+</details>
+<details id="kr-120-ат" class="h2 engine" open="">
+  <summary><div><h2>Kr 120-АТ</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">46500.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">1.4</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#don_71">DON 71</a></li>
+  <li><a href="/pysnowrunner/trucks/#gor_by4">Gor BY-4</a></li>
+  <li><a href="/pysnowrunner/trucks/#khan_39_marshall">KHAN 39 Marshall</a></li>
+  <li><a href="/pysnowrunner/trucks/#khan_lo4f">KHAN Lo4F</a></li>
+  <li><a href="/pysnowrunner/trucks/#tuz_166">TUZ 166</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('170'),
+       EngineResponsiveness=Decimal('0.14'),
+       FuelConsumption=Decimal('1.4'),
+       Torque=Decimal('46500'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.4'),
+       Name='ru_scout_old_engine_2',
+       UiName='UI_ENGINE_RU_SCOUT_OLD_2_NAME')</pre>
+  </details>
+</details>
+<details id="kr-135-t" class="h2 engine" open="">
+  <summary><div><h2>Kr 135-T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">70000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">1.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#khan_317_sentinel">KHAN 317 Sentinel</a></li>
+  <li><a href="/pysnowrunner/trucks/#khan_39_marshall">KHAN 39 Marshall</a></li>
+  <li><a href="/pysnowrunner/trucks/#yar_87">YAR 87</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('120'),
+       EngineResponsiveness=Decimal('0.35'),
+       FuelConsumption=Decimal('1.5'),
+       Torque=Decimal('70000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='ru_scout_modern_engine_0',
+       UiName='UI_ENGINE_RU_SCOUT_MODERN_0_NAME')</pre>
+  </details>
+</details>
+<details id="kr-37-model-166" class="h2 engine" open="">
+  <summary><div><h2>Kr 37 model 166</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">20000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">0.4</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#tuz_166">TUZ 166</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.5'),
+       DamageCapacity=Decimal('80'),
+       EngineResponsiveness=Decimal('0.01'),
+       FuelConsumption=Decimal('0.4'),
+       Torque=Decimal('20000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.4'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('2.0'),
+       Name='ru_scout_old_engine_tuz',
+       UiName='UI_ENGINE_RU_SCOUT_OLD_TUZ_NAME')</pre>
+  </details>
+</details>
+<details id="kr-71-c" class="h2 engine" open="">
+  <summary><div><h2>Kr 71.C</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">25000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">0.7</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#don_71">DON 71</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('100'),
+       EngineResponsiveness=Decimal('0.02'),
+       FuelConsumption=Decimal('0.7'),
+       Torque=Decimal('25000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.5'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.6'),
+       Name='ru_scout_old_engine_don',
+       UiName='UI_ENGINE_RU_SCOUT_OLD_DON_NAME')</pre>
+  </details>
+</details>
+<details id="kzgt-8-420t" class="h2 engine" open="">
+  <summary><div><h2>KZGT-8 420T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">170000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">11.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#kirovets_k7m">Kirovets K-7М</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('300'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('11.5'),
+       Torque=Decimal('170000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.5'),
+       Name='ru_kirovets_k7m_engine_2',
+       UiName='UI_ENGINE_RU_SPECIAL_M_2_NAME')</pre>
+  </details>
+</details>
+<details id="kzgt-8-490" class="h2 engine" open="">
+  <summary><div><h2>KZGT-8 490</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">130000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">9.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#kirovets_k700">Kirovets K-700</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.3'),
+       DamageCapacity=Decimal('220'),
+       EngineResponsiveness=Decimal('0.045'),
+       FuelConsumption=Decimal('9.0'),
+       Torque=Decimal('130000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.4'),
+       Name='ru_kirovets_k700_engine_0',
+       UiName='UI_ENGINE_RU_SPECIAL_0_NAME')</pre>
+  </details>
+</details>
+<details id="kzgt-8-490" class="h2 engine" open="">
+  <summary><div><h2>KZGT-8 490</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">205000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">9.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#azov_4220_antarctic">Azov 42-20 Antarctic</a></li>
+  <li><a href="/pysnowrunner/trucks/#azov_73210">Azov 73210</a></li>
+  <li><a href="/pysnowrunner/trucks/#boar_45318">BOAR 45318</a></li>
+  <li><a href="/pysnowrunner/trucks/#dan_96320">DAN 96320</a></li>
+  <li><a href="/pysnowrunner/trucks/#femm_37at">FEMM 37-AT</a></li>
+  <li><a href="/pysnowrunner/trucks/#kolob_74760">KOLOB 74760</a></li>
+  <li><a href="/pysnowrunner/trucks/#kolob_74941">KOLOB 74941</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_force_t815_7">Tatra FORCE T815-7</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_t813">Tatra Т813</a></li>
+  <li><a href="/pysnowrunner/trucks/#zikz_605r">ZiKZ 605R</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.3'),
+       DamageCapacity=Decimal('220'),
+       EngineResponsiveness=Decimal('0.045'),
+       FuelConsumption=Decimal('9.0'),
+       Torque=Decimal('205000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.4'),
+       Name='ru_special_engine_0',
+       UiName='UI_ENGINE_RU_SPECIAL_0_NAME')</pre>
+  </details>
+</details>
+<details id="kzgt-8-530-t" class="h2 engine" open="">
+  <summary><div><h2>KZGT-8 530 T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">175000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">11.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#kirovets_k700">Kirovets K-700</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('300'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('11.5'),
+       Torque=Decimal('175000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.5'),
+       Name='ru_kirovets_k700_engine_2',
+       UiName='UI_ENGINE_RU_SPECIAL_2_NAME')</pre>
+  </details>
+</details>
+<details id="kzgt-8-530-t" class="h2 engine" open="">
+  <summary><div><h2>KZGT-8 530 T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">260000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">11.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#azov_4220_antarctic">Azov 42-20 Antarctic</a></li>
+  <li><a href="/pysnowrunner/trucks/#azov_73210">Azov 73210</a></li>
+  <li><a href="/pysnowrunner/trucks/#boar_45318">BOAR 45318</a></li>
+  <li><a href="/pysnowrunner/trucks/#dan_96320">DAN 96320</a></li>
+  <li><a href="/pysnowrunner/trucks/#femm_37at">FEMM 37-AT</a></li>
+  <li><a href="/pysnowrunner/trucks/#kolob_74760">KOLOB 74760</a></li>
+  <li><a href="/pysnowrunner/trucks/#kolob_74941">KOLOB 74941</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_force_t815_7">Tatra FORCE T815-7</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_t813">Tatra Т813</a></li>
+  <li><a href="/pysnowrunner/trucks/#zikz_605r">ZiKZ 605R</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('300'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('11.5'),
+       Torque=Decimal('260000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.5'),
+       Name='ru_special_engine_2',
+       UiName='UI_ENGINE_RU_SPECIAL_2_NAME')</pre>
+  </details>
+</details>
+<details id="laz-6-t195" class="h2 engine" open="">
+  <summary><div><h2>LAZ 6 T195</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">140000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">5.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#krs_58_bandit">KRS 58 "Bandit"</a></li>
+  <li><a href="/pysnowrunner/trucks/#step_310e">Step 310Е</a></li>
+  <li><a href="/pysnowrunner/trucks/#step_3364_crocodile">Step 33-64 "Crocodile"</a></li>
+  <li><a href="/pysnowrunner/trucks/#step_39331_pike">Step 39331 "Pike"</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_805">Tatra 805</a></li>
+  <li><a href="/pysnowrunner/trucks/#tuz_16_actaeon">TUZ 16 "Actaeon"</a></li>
+  <li><a href="/pysnowrunner/trucks/#zikz_5368">ZiKZ 5368</a></li>
+  <li><a href="/pysnowrunner/trucks/#zikz_566a">ZiKZ 566A</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('200'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('5.5'),
+       Torque=Decimal('140000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.7'),
+       Name='ru_truck_old_engine_1',
+       UiName='UI_ENGINE_RU_TRUCK_OLD_1_NAME')</pre>
+  </details>
+</details>
+<details id="laz-6-t60" class="h2 engine" open="">
+  <summary><div><h2>LAZ 6 T60</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">130000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">4.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#krs_58_bandit">KRS 58 "Bandit"</a></li>
+  <li><a href="/pysnowrunner/trucks/#step_310e">Step 310Е</a></li>
+  <li><a href="/pysnowrunner/trucks/#step_3364_crocodile">Step 33-64 "Crocodile"</a></li>
+  <li><a href="/pysnowrunner/trucks/#step_39331_pike">Step 39331 "Pike"</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_805">Tatra 805</a></li>
+  <li><a href="/pysnowrunner/trucks/#tuz_16_actaeon">TUZ 16 "Actaeon"</a></li>
+  <li><a href="/pysnowrunner/trucks/#zikz_5368">ZiKZ 5368</a></li>
+  <li><a href="/pysnowrunner/trucks/#zikz_566a">ZiKZ 566A</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.8'),
+       DamageCapacity=Decimal('180'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('4.5'),
+       Torque=Decimal('130000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.6'),
+       Name='ru_truck_old_engine_0',
+       UiName='UI_ENGINE_RU_TRUCK_OLD_0_NAME')</pre>
+  </details>
+</details>
+<details id="laz-6-ta240" class="h2 engine" open="">
+  <summary><div><h2>LAZ 6 TA240</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">185000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">7.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#krs_58_bandit">KRS 58 "Bandit"</a></li>
+  <li><a href="/pysnowrunner/trucks/#step_310e">Step 310Е</a></li>
+  <li><a href="/pysnowrunner/trucks/#step_3364_crocodile">Step 33-64 "Crocodile"</a></li>
+  <li><a href="/pysnowrunner/trucks/#step_39331_pike">Step 39331 "Pike"</a></li>
+  <li><a href="/pysnowrunner/trucks/#tatra_805">Tatra 805</a></li>
+  <li><a href="/pysnowrunner/trucks/#tuz_16_actaeon">TUZ 16 "Actaeon"</a></li>
+  <li><a href="/pysnowrunner/trucks/#zikz_5368">ZiKZ 5368</a></li>
+  <li><a href="/pysnowrunner/trucks/#zikz_566a">ZiKZ 566A</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.5'),
+       DamageCapacity=Decimal('120'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('7.5'),
+       Torque=Decimal('185000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('2.1'),
+       Name='ru_truck_old_engine_3',
+       UiName='UI_ENGINE_RU_TRUCK_OLD_3_NAME')</pre>
+  </details>
+</details>
+<details id="laz-6t173-voin" class="h2 engine" open="">
+  <summary><div><h2>LAZ 6T173 "Voin"</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">150000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">5.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#step_310e">Step 310Е</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.5'),
+       DamageCapacity=Decimal('150'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('5.0'),
+       Torque=Decimal('150000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.5'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('2.0'),
+       Name='ru_truck_old_engine_step_310e',
+       UiName='UI_ENGINE_RU_TRUCK_OLD_STEP_310E_NAME')</pre>
+  </details>
+</details>
+<details id="laz-8-t260" class="h2 engine" open="">
+  <summary><div><h2>LAZ 8 T260</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">160000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">6.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#tayga_6436">Tayga 6436</a></li>
+  <li><a href="/pysnowrunner/trucks/#tayga_6455b">Tayga 6455B</a></li>
+  <li><a href="/pysnowrunner/trucks/#voron_ae4380">Voron AE-4380</a></li>
+  <li><a href="/pysnowrunner/trucks/#voron_d53233">Voron D-53233</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.8'),
+       DamageCapacity=Decimal('200'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('6.5'),
+       Torque=Decimal('160000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.6'),
+       Name='ru_truck_old_heavy_engine_0',
+       UiName='UI_ENGINE_RU_TRUCK_OLD_HEAVY_0_NAME')</pre>
+  </details>
+</details>
+<details id="laz-8-t290" class="h2 engine" open="">
+  <summary><div><h2>LAZ 8 T290</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">180000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">7.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#tayga_6436">Tayga 6436</a></li>
+  <li><a href="/pysnowrunner/trucks/#tayga_6455b">Tayga 6455B</a></li>
+  <li><a href="/pysnowrunner/trucks/#voron_ae4380">Voron AE-4380</a></li>
+  <li><a href="/pysnowrunner/trucks/#voron_d53233">Voron D-53233</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('260'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('7.5'),
+       Torque=Decimal('180000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.7'),
+       Name='ru_truck_old_heavy_engine_1',
+       UiName='UI_ENGINE_RU_TRUCK_OLD_HEAVY_1_NAME')</pre>
+  </details>
+</details>
+<details id="laz-8-t310-tractor" class="h2 engine" open="">
+  <summary><div><h2>LAZ 8 T310 Tractor</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">115000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">9.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#kirovets_k7m">Kirovets K-7М</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.3'),
+       DamageCapacity=Decimal('220'),
+       EngineResponsiveness=Decimal('0.045'),
+       FuelConsumption=Decimal('9.0'),
+       Torque=Decimal('115000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.4'),
+       Name='ru_kirovets_k7m_engine_0',
+       UiName='UI_ENGINE_RU_SPECIAL_M_0_NAME')</pre>
+  </details>
+</details>
+<details id="mc-v6-11-ot" class="h2 engine" open="">
+  <summary><div><h2>MC-V6 11.OT</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">176500.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">8.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#mack_defense_m917">Mack Defense M917</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('180'),
+       EngineResponsiveness=Decimal('0.035'),
+       FuelConsumption=Decimal('8.0'),
+       Torque=Decimal('176500'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.5'),
+       Name='us_special_mack_defense_mcv6',
+       UiName='UI_ENGINE_US_SPECIAL_MACK_DEFENSE_MCV6_NAME')</pre>
+  </details>
+</details>
+<details id="mc-v8-13-ot" class="h2 engine" open="">
+  <summary><div><h2>MC-V8 13.OT</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">232000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">10.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#mack_defense_m917">Mack Defense M917</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.8'),
+       DamageCapacity=Decimal('300'),
+       EngineResponsiveness=Decimal('0.044'),
+       FuelConsumption=Decimal('10.0'),
+       Torque=Decimal('232000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.75'),
+       MaxDeltaAngVel=Decimal('0.015'),
+       DamagedConsumptionModifier=Decimal('1.4'),
+       Name='us_special_mack_defense_mcv8',
+       UiName='UI_ENGINE_US_SPECIAL_MACK_DEFENSE_MCV8_NAME')</pre>
+  </details>
+</details>
+<details id="mc-v8-fuelmiser" class="h2 engine" open="">
+  <summary><div><h2>MC-V8 FuelMiser</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">222000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">9.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#mack_defense_m917">Mack Defense M917</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.75'),
+       DamageCapacity=Decimal('280'),
+       EngineResponsiveness=Decimal('0.045'),
+       FuelConsumption=Decimal('9.5'),
+       Torque=Decimal('222000'),
+       DamagedMinTorqueMultiplier=Decimal('0.9'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.02'),
+       DamagedConsumptionModifier=Decimal('1.3'),
+       Name='us_special_mack_defense_mcv8fm',
+       UiName='UI_ENGINE_US_SPECIAL_MACK_DEFENSE_MCV8FM_NAME')</pre>
+  </details>
+</details>
+<details id="navglobal-d12-t-900" class="h2 engine" open="">
+  <summary><div><h2>NavGlobal D12-T 900</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">175000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">8.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#navistar_5000mv">Navistar 5000-MV</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('240'),
+       EngineResponsiveness=Decimal('0.3'),
+       FuelConsumption=Decimal('8.5'),
+       Torque=Decimal('175000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.4'),
+       Name='us_truck_military_navistar_0',
+       UiName='UI_ENGINE_US_TRUCK_MILITARY_NAVISTAR_0_NAME')</pre>
+  </details>
+</details>
+<details id="prime-с13" class="h2 engine" open="">
+  <summary><div><h2>Prime С13</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">228000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">8.8</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#kenworth_w990">Kenworth W990</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.4'),
+       DamageCapacity=Decimal('180'),
+       EngineResponsiveness=Decimal('0.18'),
+       FuelConsumption=Decimal('8.8'),
+       Torque=Decimal('228000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='us_truck_modern_engine_prime_c13',
+       UiName='UI_ENGINE_US_TRUCK_MODERN_KENWORTH_990_NAME')</pre>
+  </details>
+</details>
+<details id="sbr6-250-r1" class="h2 engine" open="">
+  <summary><div><h2>SBR6-250-R1</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">245000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">10.8</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#femm_37at">FEMM 37-AT</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.58'),
+       DamageCapacity=Decimal('200'),
+       EngineResponsiveness=Decimal('0.06'),
+       FuelConsumption=Decimal('10.8'),
+       Torque=Decimal('245000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.75'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.6'),
+       Name='ru_special_femm_37at_sbr_r1',
+       UiName='UI_ENGINE_RU_SPECIAL_SBR_R1_NAME')</pre>
+  </details>
+</details>
+<details id="sbr6-250-r2" class="h2 engine" open="">
+  <summary><div><h2>SBR6-250-R2</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">288000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">18.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#femm_37at">FEMM 37-AT</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.33'),
+       DamageCapacity=Decimal('240'),
+       EngineResponsiveness=Decimal('0.06'),
+       FuelConsumption=Decimal('18'),
+       Torque=Decimal('288000'),
+       DamagedMinTorqueMultiplier=Decimal('0.8'),
+       DamagedMaxTorqueMultiplier=Decimal('0.5'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.8'),
+       Name='ru_special_femm_37at_sbr_r2',
+       UiName='UI_ENGINE_RU_SPECIAL_SBR_R2_NAME')</pre>
+  </details>
+</details>
+<details id="si-6v-1900" class="h2 engine" open="">
+  <summary><div><h2>Si-6V/1900</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">135000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">5.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#chevrolet_kodiakc70">Chevrolet Kodiak C70</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_fleetstar_f2070a">Fleetstar F2070A</a></li>
+  <li><a href="/pysnowrunner/trucks/#ford_clt9000">Ford CLT9000</a></li>
+  <li><a href="/pysnowrunner/trucks/#freightliner_114sd">Freightliner 114SD</a></li>
+  <li><a href="/pysnowrunner/trucks/#gmc_8000">GMC Brigadier 8000</a></li>
+  <li><a href="/pysnowrunner/trucks/#gmc_9500">GMC MH9500</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_loadstar_1700">International Loadstar 1700</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_transtar_4070a">International Transtar 4070A</a></li>
+  <li><a href="/pysnowrunner/trucks/#ws_4964_white">White Western Star 4964</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.3'),
+       DamageCapacity=Decimal('160'),
+       EngineResponsiveness=Decimal('0.035'),
+       FuelConsumption=Decimal('5.5'),
+       Torque=Decimal('135000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.6'),
+       Name='us_truck_old_engine_0',
+       UiName='UI_ENGINE_US_TRUCK_OLD_0_NAME')</pre>
+  </details>
+</details>
+<details id="si-6v-2100t" class="h2 engine" open="">
+  <summary><div><h2>Si-6V/2100T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">145000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">6.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#chevrolet_kodiakc70">Chevrolet Kodiak C70</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_fleetstar_f2070a">Fleetstar F2070A</a></li>
+  <li><a href="/pysnowrunner/trucks/#ford_clt9000">Ford CLT9000</a></li>
+  <li><a href="/pysnowrunner/trucks/#freightliner_114sd">Freightliner 114SD</a></li>
+  <li><a href="/pysnowrunner/trucks/#gmc_8000">GMC Brigadier 8000</a></li>
+  <li><a href="/pysnowrunner/trucks/#gmc_9500">GMC MH9500</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_loadstar_1700">International Loadstar 1700</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_transtar_4070a">International Transtar 4070A</a></li>
+  <li><a href="/pysnowrunner/trucks/#ws_4964_white">White Western Star 4964</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.4'),
+       DamageCapacity=Decimal('190'),
+       EngineResponsiveness=Decimal('0.035'),
+       FuelConsumption=Decimal('6.0'),
+       Torque=Decimal('145000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.7'),
+       Name='us_truck_old_engine_1',
+       UiName='UI_ENGINE_US_TRUCK_OLD_1_NAME')</pre>
+  </details>
+</details>
+<details id="si-6v-2380" class="h2 engine" open="">
+  <summary><div><h2>Si-6V/2380</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">160000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">7.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#international_transtar_4070a">International Transtar 4070A</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.5'),
+       DamageCapacity=Decimal('200'),
+       EngineResponsiveness=Decimal('0.035'),
+       FuelConsumption=Decimal('7.0'),
+       Torque=Decimal('160000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.8'),
+       Name='us_truck_old_engine_4070',
+       UiName='UI_ENGINE_US_TRUCK_OLD_4070_NAME')</pre>
+  </details>
+</details>
+<details id="si-8v-2300" class="h2 engine" open="">
+  <summary><div><h2>Si-8V/2300</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">160000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">6.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#aramatsu_forester">Aramatsu Forester</a></li>
+  <li><a href="/pysnowrunner/trucks/#cat_ct680">Caterpillar CT680</a></li>
+  <li><a href="/pysnowrunner/trucks/#cat_ct681">Caterpillar CT681</a></li>
+  <li><a href="/pysnowrunner/trucks/#derry_longhorn_4520">Derry Longhorn 4520</a></li>
+  <li><a href="/pysnowrunner/trucks/#freightliner_m916a1">Freightliner M916A1</a></li>
+  <li><a href="/pysnowrunner/trucks/#international_hx_520">International HX 520</a></li>
+  <li><a href="/pysnowrunner/trucks/#kenworth_w990">Kenworth W990</a></li>
+  <li><a href="/pysnowrunner/trucks/#royal_bm17">Royal BM17</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_nf1424">Western Star 47X NF 1424</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_nf1430">Western Star 47X NF 1430</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_49x">Western Star 49X</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_57x">Western Star 57X</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.5'),
+       DamageCapacity=Decimal('160'),
+       EngineResponsiveness=Decimal('0.2'),
+       FuelConsumption=Decimal('6.0'),
+       Torque=Decimal('160000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='us_truck_modern_engine_0',
+       UiName='UI_ENGINE_US_TRUCK_MODERN_0_NAME')</pre>
+  </details>
+</details>
+<details id="si-8v-2850tc" class="h2 engine" open="">
+  <summary><div><h2>Si-8V/2850Tc</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">220000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">8.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#western_star_nf1424">Western Star 47X NF 1424</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_nf1430">Western Star 47X NF 1430</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_49x">Western Star 49X</a></li>
+  <li><a href="/pysnowrunner/trucks/#western_star_57x">Western Star 57X</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.4'),
+       DamageCapacity=Decimal('170'),
+       EngineResponsiveness=Decimal('0.15'),
+       FuelConsumption=Decimal('8.5'),
+       Torque=Decimal('220000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='us_truck_modern_engine_ws49x',
+       UiName='UI_ENGINE_US_TRUCK_MODERN_WS_49X_NAME')</pre>
+  </details>
+</details>
+<details id="si-8v-2900tta" class="h2 engine" open="">
+  <summary><div><h2>Si-8V/2900TTA</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">210000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">6.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#cat_ct681">Caterpillar CT681</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.5'),
+       DamageCapacity=Decimal('200'),
+       EngineResponsiveness=Decimal('0.1'),
+       FuelConsumption=Decimal('6.5'),
+       Torque=Decimal('210000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.1'),
+       Name='us_truck_modern_engine_cathx',
+       UiName='UI_ENGINE_US_TRUCK_MODERN_CATHX_NAME')</pre>
+  </details>
+</details>
+<details id="storm3120т" class="h2 engine" open="">
+  <summary><div><h2>STORM3120Т</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">265000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">14.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#zikz_612h_mastodont">ZiKZ 612H</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.3'),
+       DamageCapacity=Decimal('320'),
+       EngineResponsiveness=Decimal('0.045'),
+       FuelConsumption=Decimal('14.0'),
+       Torque=Decimal('265000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.05'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='ru_special_mastodont_2',
+       UiName='UI_ENGINE_RU_SPECIAL_ZIKZ_MASTODONT_2_NAME')</pre>
+  </details>
+</details>
+<details id="tag-404" class="h2 engine" open="">
+  <summary><div><h2>TAG-404</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">80000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">5.2</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#burlak_6x6">Burlak 6x6</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('150'),
+       EngineResponsiveness=Decimal('0.1'),
+       FuelConsumption=Decimal('5.2'),
+       Torque=Decimal('80000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.05'),
+       DamagedConsumptionModifier=Decimal('1.2'),
+       Name='ru_offroad_burlak_engine',
+       UiName='UI_ENGINE_RU_OFFROAD_BURLAK_6X6_NAME')</pre>
+  </details>
+</details>
+<details id="tusk12-530-р2" class="h2 engine" open="">
+  <summary><div><h2>TUSK12-530-Р2</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">203000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">20.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#zikz_612h_mastodont">ZiKZ 612H</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.4'),
+       DamageCapacity=Decimal('150'),
+       EngineResponsiveness=Decimal('0.03'),
+       FuelConsumption=Decimal('20.0'),
+       Torque=Decimal('203000'),
+       DamagedMinTorqueMultiplier=Decimal('0.8'),
+       DamagedMaxTorqueMultiplier=Decimal('0.5'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.4'),
+       Name='ru_special_mastodont_0',
+       UiName='UI_ENGINE_RU_SPECIAL_ZIKZ_MASTODONT_0_NAME')</pre>
+  </details>
+</details>
+<details id="tusk12-850-р4т" class="h2 engine" open="">
+  <summary><div><h2>TUSK12-850-Р4Т</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">230000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">17.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#zikz_612h_mastodont">ZiKZ 612H</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.5'),
+       DamageCapacity=Decimal('260'),
+       EngineResponsiveness=Decimal('0.035'),
+       FuelConsumption=Decimal('17.0'),
+       Torque=Decimal('230000'),
+       DamagedMinTorqueMultiplier=Decimal('0.9'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.03'),
+       DamagedConsumptionModifier=Decimal('1.3'),
+       Name='ru_special_mastodont_1',
+       UiName='UI_ENGINE_RU_SPECIAL_ZIKZ_MASTODONT_1_NAME')</pre>
+  </details>
+</details>
+<details id="westline-v12-m900" class="h2 engine" open="">
+  <summary><div><h2>Westline V12 M900</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">210000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">10.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#ank_mk38">ANK MK38</a></li>
+  <li><a href="/pysnowrunner/trucks/#ank_mk38_ht">ANK MK38 CIVILIAN</a></li>
+  <li><a href="/pysnowrunner/trucks/#derry_longhorn_3194">Derry Longhorn 3194</a></li>
+  <li><a href="/pysnowrunner/trucks/#pacific_p12w">Pacific P12</a></li>
+  <li><a href="/pysnowrunner/trucks/#pacific_p16">Pacific P16</a></li>
+  <li><a href="/pysnowrunner/trucks/#pacific_p512">Pacific P512 PF</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.7'),
+       DamageCapacity=Decimal('280'),
+       EngineResponsiveness=Decimal('0.2'),
+       FuelConsumption=Decimal('10.0'),
+       Torque=Decimal('210000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.5'),
+       Name='us_truck_old_heavy_engine_2',
+       UiName='UI_ENGINE_US_TRUCK_OLD_HEAVY_2_NAME')</pre>
+  </details>
+</details>
+<details id="westline-v16-m2300" class="h2 engine" open="">
+  <summary><div><h2>Westline V16 M2300</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">220000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">11.0</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#cat_745c">Caterpillar 745С</a></li>
+  <li><a href="/pysnowrunner/trucks/#cat_770g">Caterpillar 770G</a></li>
+  <li><a href="/pysnowrunner/trucks/#derry_special_15c177">Derry Special 15C-177</a></li>
+  <li><a href="/pysnowrunner/trucks/#paystar_5600ts">International Paystar 5600TS</a></li>
+  <li><a href="/pysnowrunner/trucks/#ws_6900xd_twin">Western Star 6900 TwinSteer</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('260'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('11.0'),
+       Torque=Decimal('220000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.4'),
+       Name='us_special_engine_1',
+       UiName='UI_ENGINE_US_SPECIAL_1_NAME')</pre>
+  </details>
+</details>
+<details id="westline-v16-m2450" class="h2 engine" open="">
+  <summary><div><h2>Westline V16 M2450</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">250000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">12.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#cat_745c">Caterpillar 745С</a></li>
+  <li><a href="/pysnowrunner/trucks/#cat_770g">Caterpillar 770G</a></li>
+  <li><a href="/pysnowrunner/trucks/#derry_special_15c177">Derry Special 15C-177</a></li>
+  <li><a href="/pysnowrunner/trucks/#paystar_5600ts">International Paystar 5600TS</a></li>
+  <li><a href="/pysnowrunner/trucks/#ws_6900xd_twin">Western Star 6900 TwinSteer</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.5'),
+       DamageCapacity=Decimal('280'),
+       EngineResponsiveness=None,
+       FuelConsumption=Decimal('12.5'),
+       Torque=Decimal('250000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.7'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.5'),
+       Name='us_special_engine_2',
+       UiName='UI_ENGINE_US_SPECIAL_2_NAME')</pre>
+  </details>
+</details>
+<details id="westline-v6-2350t" class="h2 engine" open="">
+  <summary><div><h2>Westline V6 2350T</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">155000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">6.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#international_fleetstar_f2070a">Fleetstar F2070A</a></li>
+  <li><a href="/pysnowrunner/trucks/#ws_4964_white">White Western Star 4964</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.5'),
+       DamageCapacity=Decimal('220'),
+       EngineResponsiveness=Decimal('0.035'),
+       FuelConsumption=Decimal('6.5'),
+       Torque=Decimal('155000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.6'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.8'),
+       Name='us_truck_old_engine_2',
+       UiName='UI_ENGINE_US_TRUCK_OLD_2_NAME')</pre>
+  </details>
+</details>
+<details id="westline-v6-2420" class="h2 engine" open="">
+  <summary><div><h2>Westline V6 2420</h2></div></summary>
+  <table style="width: fit-content;">
+    <tr>
+      <th>Torque</th>
+      <td class="right">140000.0</td>
+    </tr>
+    <tr>
+      <th>Fuel Consumption</th>
+      <td class="right">7.5</td>
+    </tr>
+  </table>
+  <h3>Trucks</h3>
+<ul>
+  <li><a href="/pysnowrunner/trucks/#gmc_9500">GMC MH9500</a></li>
+</ul>
+  <h3>Raw Data</h3>
+  <details class="h4">
+    <summary><div><h4>Python</h4></div></summary>
+    <pre>Engine(CriticalDamageThreshold=Decimal('0.6'),
+       DamageCapacity=Decimal('240'),
+       EngineResponsiveness=Decimal('0.035'),
+       FuelConsumption=Decimal('7.5'),
+       Torque=Decimal('140000'),
+       DamagedMinTorqueMultiplier=Decimal('1.0'),
+       DamagedMaxTorqueMultiplier=Decimal('0.8'),
+       MaxDeltaAngVel=Decimal('0.01'),
+       DamagedConsumptionModifier=Decimal('1.9'),
+       Name='us_truck_old_engine_gmc9500',
+       UiName='UI_ENGINE_US_TRUCK_OLD_GMC9500_NAME')</pre>
+  </details>
+</details>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p>SnowRunner game data extracted from the game files.</p>
+      </div>
+      <div class="footer-col">
+        <p>
+          generated: <time datetime="2024-04-17T17:29:16+02:00">2024-04-17 17:29:16 +0200</time><br/>
+          extracted: <time datetime="2024-04-17T17:29:12+02:00">2024-04-17 15:29:12 +0000</time><br/>
+          <code>4cc3b68be0958b826ae0de71620f576874578c03f62402eaaa588443e577bcff  initial.pak</code>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>
