@@ -485,7 +485,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     )
     p.add_argument("-i", "--input", required=True, help="path to initiak.pak")
     p.add_argument("-o", "--output", default=os.path.curdir, help="Jekyll directory")
-    args = p.parse_args()
+    args = p.parse_args(argv)
 
     loglevels = {
         0: logging.WARNING,
