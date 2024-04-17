@@ -21,6 +21,15 @@ append_head: |-
   <summary><div><h2>{{ tire.display_name }}</h2></div></summary>
   {% for variant in tire.variants -%}
   <h3 id="{{ tire.display_name | slugify }}-{{ variant.slug }}">{{ variant.slug }}</h3>
+  <table>
+    {%- if variant.price %}
+    <tr>
+      <th>Price</th>
+      <td class="right">{{ variant.price }} ¤</td>
+    </tr>
+    {%- endif %}
+  </table>
+  <h4 id="{{ tire.display_name | slugify }}-{{ variant.slug }}-friction">Friction</h4>
   <table style="width: fit-content;">
     <tbody>
       <tr>

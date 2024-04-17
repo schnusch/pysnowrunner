@@ -35,6 +35,22 @@ append_head: |-
       {%- endfor -%}
       </p>
     {%- endif %}
+      <table>
+        <tbody>
+    {%- if truck.price %}
+          <tr>
+            <th>Price</th>
+            <td class="right">{{ truck.price }} ¤</td>
+          </tr>
+    {%- endif %}
+    {%- if truck.fuel_capacity %}
+          <tr>
+            <th>Fuel Capacity</th>
+            <td class="right">{{ truck.fuel_capacity }} l</td>
+          </tr>
+    {%- endif %}
+        </tbody>
+      </table>
     {% for chart in truck.charts -%}
       <h3>{{ chart.name }}</h3>
       <details class="h4" open="">

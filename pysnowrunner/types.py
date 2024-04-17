@@ -450,6 +450,7 @@ class Truck(Base):
 
     UiName: str
     Price: int
+    FuelCapacity: int
     CompatibleWheels: List[CompatibleWheels]
     EngineSocket: List[EngineSocket]
     Wheels: List[Wheel]
@@ -529,29 +530,46 @@ class Truck(Base):
     ) -> T_Truck:
         self = super().from_xml(elem, templates)
 
-        self = dataclasses.replace(
-            self,
-            CompatibleWheels=[
-                CompatibleWheels.from_xml(w, templates, tires)
-                for w in elem.iterfind("./TruckData/CompatibleWheels")
-            ],
-            EngineSocket=[
-                EngineSocket.from_xml(e, templates, engines)
-                for e in elem.iterfind("./TruckData/EngineSocket")
-            ],
-            Wheels=[
-                Wheel.from_xml(w, templates)
-                for w in elem.iterfind("./TruckData/Wheels/Wheel")
-            ],
-            ExtraWheels=[
-                Wheel.from_xml(w, templates)
-                for w in elem.iterfind("./TruckData/ExtraWheels/Wheel")
-            ],
-        )
+        truck_data = elem.find("./TruckData")
+        if truck_data is not None:
+            fuel_capacity = truck_data.get("FuelCapacity")
+            if fuel_capacity is not None:
+                self = dataclasses.replace(
+                    self,
+                    FuelCapacity=int(fuel_capacity, 10),
+                )
 
-        self = dataclasses.replace(self, WheelBase=self.get_wheel_base())
+            self = dataclasses.replace(
+                self,
+                CompatibleWheels=[
+                    CompatibleWheels.from_xml(w, templates, tires)
+                    for w in truck_data.iterfind("./CompatibleWheels")
+                ],
+                EngineSocket=[
+                    EngineSocket.from_xml(e, templates, engines)
+                    for e in truck_data.iterfind("./EngineSocket")
+                ],
+                Wheels=[
+                    Wheel.from_xml(w, templates)
+                    for w in truck_data.iterfind("./Wheels/Wheel")
+                ],
+                ExtraWheels=[
+                    Wheel.from_xml(w, templates)
+                    for w in truck_data.iterfind("./ExtraWheels/Wheel")
+                ],
+            )
 
-        self = dataclasses.replace(self, TrackWidths=self.get_track_widths())
+            self = dataclasses.replace(self, WheelBase=self.get_wheel_base())
+
+            self = dataclasses.replace(self, TrackWidths=self.get_track_widths())
+        else:
+            self = dataclasses.replace(
+                self,
+                CompatibleWheels=[],
+                EngineSocket=[],
+                Wheels=[],
+                ExtraWheels=[],
+            )
 
         gamedata = elem.find("./GameData")
         if gamedata is not None:

@@ -286,6 +286,7 @@ class JekyllOutput(object):
         return {
             "slug": slug,
             "display_name": self.get_display_name(tire.UiName),
+            "price": tire.Price,
             "asphalt": tire.WheelFriction.BodyFrictionAsphalt,
             "dirt": tire.WheelFriction.BodyFriction,
             "mud": tire.WheelFriction.SubstanceFriction,
@@ -478,6 +479,8 @@ class JekyllOutput(object):
             "slug": slug,
             "display_name": self.strings[truck.UiName],
             "urls": urls,
+            "price": truck.Price,
+            "fuel_capacity": truck.FuelCapacity,
             "charts": charts,
             "python": pprint.pformat(truck),
         }
