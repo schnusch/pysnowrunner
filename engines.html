@@ -13,11 +13,11 @@ append_head: |-
   </script>
 ---
 
-{% capture height %}{{ site.data.engines.chartjs.data.labels | size }}{% endcapture -%}
+{%- capture height %}{{ site.data.engines.chartjs.data.labels | size }}{% endcapture %}
 <p>{% include chart.html id="chart-engines" height=height %}</p>
 
-{% assign engines = site.data.engines.engines | sort_natural: "display_name" -%}
-{% for engine in engines -%}
+{%- assign engines = site.data.engines.engines | sort_natural: "display_name" %}
+{%- for engine in engines %}
 <details id="{{ engine.display_name | slugify }}" class="h2 engine" open="">
   <summary><div><h2>{{ engine.display_name }}</h2></div></summary>
   <table style="width: fit-content;">
@@ -30,11 +30,11 @@ append_head: |-
       <td class="right">{{ engine.fuel_consumption }}</td>
     </tr>
   </table>
-  {% include truck-list.html trucks=engine.trucks -%}
+  {% include truck-list.html trucks=engine.trucks %}
   <h3>Raw Data</h3>
   <details class="h4">
     <summary><div><h4>Python</h4></div></summary>
     <pre>{{ engine.python }}</pre>
   </details>
 </details>
-{% endfor -%}
+{%- endfor %}

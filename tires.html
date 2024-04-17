@@ -12,14 +12,14 @@ append_head: |-
   </script>
 ---
 
-{% capture height %}{{ site.data.tires.chartjs.data.labels | size }}{% endcapture -%}
+{%- capture height %}{{ site.data.tires.chartjs.data.labels | size }}{% endcapture %}
 <p>{% include chart.html id="chart-tires" height=height %}</p>
 
-{% assign tires = site.data.tires.tires | sort_natural: "display_name" -%}
-{% for tire in tires -%}
+{%- assign tires = site.data.tires.tires | sort_natural: "display_name" %}
+{%- for tire in tires %}
 <details id="{{ tire.display_name | slugify }}" class="h2 tires" open="">
   <summary><div><h2>{{ tire.display_name }}</h2></div></summary>
-  {% for variant in tire.variants -%}
+  {%- for variant in tire.variants %}
   <h3 id="{{ tire.display_name | slugify }}-{{ variant.slug }}">{{ variant.slug }}</h3>
   <table>
     {%- if variant.price %}
@@ -46,12 +46,12 @@ append_head: |-
       </tr>
     </tbod>
   </table>
-  {% include truck-list.html trucks=variant.trucks -%}
+  {% include truck-list.html trucks=variant.trucks %}
   <h4>Raw Data</h4>
   <details class="h5">
     <summary><div><h5>Python</h5></div></summary>
     <pre>{{ variant.python }}</pre>
   </details>
-  {% endfor -%}
+  {%- endfor %}
 </details>
-{% endfor -%}
+{%- endfor %}

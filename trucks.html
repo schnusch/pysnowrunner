@@ -18,8 +18,8 @@ append_head: |-
   </script>
 ---
 
-{% assign trucks = site.data.trucks | sort_natural: "display_name" -%}
-{% for truck in trucks -%}
+{%- assign trucks = site.data.trucks | sort_natural: "display_name" %}
+{%- for truck in trucks %}
 <details id="{{ truck.slug }}" class="h2" open="">
   <summary><div><h2>{{ truck.display_name }}</h2></div></summary>
   <div class="truck">
@@ -51,12 +51,12 @@ append_head: |-
     {%- endif %}
         </tbody>
       </table>
-    {% for chart in truck.charts -%}
+    {%- for chart in truck.charts %}
       <h3>{{ chart.name }}</h3>
       <details class="h4" open="">
         <summary><div><h4>Chart</h4></div></summary>
-        {% capture id %}{{ truck.slug }}-chart-{{ chart.name | slugify }}{% endcapture -%}
-        {% capture height %}{{ chart.chartjs.data.labels | size }}{% endcapture -%}
+        {%- capture id %}{{ truck.slug }}-chart-{{ chart.name | slugify }}{% endcapture %}
+        {%- capture height %}{{ chart.chartjs.data.labels | size }}{% endcapture %}
         {% include chart.html id=id height=height %}
         <script>charts.push([document.getElementById("{{ id }}"), {{ chart.chartjs | jsonify }}]);</script>
       </details>
@@ -66,24 +66,24 @@ append_head: |-
           <thead>
             <tr>
               <th>Name</th>
-            {% for dataset in chart.chartjs.data.datasets -%}
+            {%- for dataset in chart.chartjs.data.datasets %}
               <th>{{ dataset.label }}</th>
-            {% endfor -%}
+            {%- endfor %}
           </thead>
           <tbody>
-          {% for label in chart.chartjs.data.labels -%}
+          {%- for label in chart.chartjs.data.labels %}
             <tr>
               <td><a href="{{ "/engines/" | relative_url }}#{{ label | slugify }}">{{ label }}</a></td>
-            {% assign i = forloop.index0 -%}
-            {% for dataset in chart.chartjs.data.datasets -%}
+            {%- assign i = forloop.index0 %}
+            {%- for dataset in chart.chartjs.data.datasets %}
               <td class="right">{{ dataset.data[i] }}</td>
-            {% endfor -%}
+            {%- endfor %}
             </tr>
-          {% endfor -%}
+          {%- endfor %}
           </tbody>
         </table>
       </details>
-    {% endfor -%}
+    {%- endfor %}
       <h3>Raw Data</h3>
       <details class="h4">
         <summary><div><h4>Python</h4></div></summary>
@@ -92,4 +92,4 @@ append_head: |-
     </div>
   </div>
 </details>
-{% endfor -%}
+{%- endfor %}
