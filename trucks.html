@@ -69,6 +69,7 @@ append_head: |-
             {%- for dataset in chart.chartjs.data.datasets %}
               <th>{{ dataset.label }}</th>
             {%- endfor %}
+            </tr>
           </thead>
           <tbody>
           {%- for label in chart.chartjs.data.labels %}
